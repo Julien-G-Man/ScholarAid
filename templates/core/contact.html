@@ -1,26 +1,217 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="mb-4">Contact Us</h1>
-<p>Have questions? Reach out to us:</p>
-<ul class="list-unstyled">
-  <li><strong>Email:</strong> support@scholaraid.com</li>
-  <li><strong>Phone:</strong> +233 555 123 456</li>
-</ul>
+<style>
+    /* Specific styles for the Contact page to match the theme */
+    :root {
+        --primary-brand-red: #A31F34;
+        --secondary-light: #FCE8E9;
+        --text-dark: #212529;
+        --text-muted: #6c757d;
+    }
 
-<form class="mt-4">
-  <div class="mb-3">
-    <label for="name" class="form-label">Your Name</label>
-    <input type="text" class="form-control" id="name" placeholder="Enter your name">
-  </div>
-  <div class="mb-3">
-    <label for="email" class="form-label">Your Email</label>
-    <input type="email" class="form-control" id="email" placeholder="Enter your email">
-  </div>
-  <div class="mb-3">
-    <label for="message" class="form-label">Message</label>
-    <textarea class="form-control" id="message" rows="4" placeholder="Type your message here"></textarea>
-  </div>
-  <button type="submit" class="btn btn-primary">Send</button>
-</form>
+    /* Contact Hero Section */
+    .contact-hero {
+        background: linear-gradient(rgba(163, 31, 52, 0.9), rgba(163, 31, 52, 0.9)),
+                    url("https://source.unsplash.com/1600x600/?office,students,ghana") center/cover no-repeat;
+        min-height: 50vh; /* A bit taller for more impact */
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: white;
+        margin-bottom: 4rem; /* More space below hero */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .contact-hero h1 {
+        font-weight: 700;
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+    .contact-hero p {
+        font-size: 1.25rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Section Titles */
+    .section-title {
+        font-weight: 700;
+        color: var(--primary-brand-red);
+        margin-bottom: 3rem;
+        position: relative;
+        padding-bottom: 10px;
+    }
+    .section-title::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background-color: var(--primary-brand-red);
+        border-radius: 2px;
+    }
+
+    /* Contact Info Cards */
+    .contact-info-card {
+        background-color: white;
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        padding: 2.5rem 1.5rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+        height: 100%; /* Ensure cards are same height */
+    }
+    .contact-info-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    .contact-info-card .icon {
+        font-size: 3rem;
+        color: var(--primary-brand-red);
+        margin-bottom: 1rem;
+    }
+    .contact-info-card h4 {
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+    }
+    .contact-info-card p {
+        color: var(--text-muted);
+        line-height: 1.7;
+    }
+
+    /* Contact Form Styling */
+    .contact-form-container {
+        background-color: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+    }
+    .form-label {
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+    .form-control {
+        border-radius: 0.75rem; /* More rounded inputs */
+        padding: 0.75rem 1rem;
+        border: 1px solid #e0e0e0;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-control:focus {
+        border-color: var(--primary-brand-red);
+        box-shadow: 0 0 0 0.2rem rgba(163, 31, 52, 0.2);
+        outline: none;
+    }
+    textarea.form-control {
+        min-height: 150px;
+        resize: vertical;
+    }
+    .btn-submit {
+        background-color: var(--primary-brand-red);
+        border: none;
+        color: white;
+        padding: 0.9rem 3rem;
+        border-radius: 50px; /* Pill-shaped button */
+        font-weight: 600;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 5px 15px rgba(163, 31, 52, 0.3);
+    }
+    .btn-submit:hover {
+        background-color: #8E1B2C;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(163, 31, 52, 0.4);
+    }
+
+    /* Map Section */
+    .map-container {
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        min-height: 400px; /* Ensure map has visible height */
+    }
+</style>
+
+<section class="contact-hero d-flex flex-column justify-content-center align-items-center">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold">Get In Touch!</h1>
+        <p class="lead">
+            We're here to answer all your questions about scholarships, AI reviews, and more.
+        </p>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center">Our Contact Details</h2>
+        <div class="row g-4 mb-5 justify-content-center">
+            <div class="col-md-4">
+                <div class="contact-info-card">
+                    <i class="bi bi-envelope-fill icon"></i>
+                    <h4>Email Us</h4>
+                    <p>Our friendly team is here to help you.</p>
+                    <p class="fw-bold text-primary-brand">support@scholaraid.com</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="contact-info-card">
+                    <i class="bi bi-phone-fill icon"></i>
+                    <h4>Call Us</h4>
+                    <p>Mon-Fri, 9am-5pm GMT</p>
+                    <p class="fw-bold text-primary-brand">+233 555 123 456</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="contact-info-card">
+                    <i class="bi bi-geo-alt-fill icon"></i>
+                    <h4>Visit Our Office</h4>
+                    <p>Find us on the KNUST Campus.</p>
+                    <p class="fw-bold text-primary-brand">Kumasi, Ashanti Region, Ghana</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title text-center">Send Us a Message</h2>
+        <div class="contact-form-container">
+            <form>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="name" class="form-label">Your Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="E.g., John Doe" required>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="email" class="form-label">Your Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="E.g., john.doe@example.com" required>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="subject" class="form-label">Subject</label>
+                    <input type="text" class="form-control" id="subject" placeholder="E.g., Scholarship Inquiry">
+                </div>
+                <div class="mb-4">
+                    <label for="message" class="form-label">Your Message</label>
+                    <textarea class="form-control" id="message" rows="6" placeholder="Type your message here..." required></textarea>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-submit">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light-brand">
+    <div class="container">
+        <h2 class="section-title text-center">Find Us on the Map</h2>
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15849.263591963056!2d-1.5794356499999999!3d6.67104865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdb96c738093d6d%3A0x6d9f518e3c79c8e!2sKwame%20Nkrumah%20University%20of%20Science%20and%20Technology!5e0!3m2!1sen!2sgh!4v1700000000000!5m2!1sen!2sgh" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</section>
 {% endblock %}
