@@ -6,12 +6,18 @@ from django.db import models
 # Each instance (object) of the class = a row in the table.
 
 class Scholarships(models.Model):
-   title = models.CharField(max_length=200)
+   name = models.CharField(max_length=200)
    provider = models.CharField(max_length=100)
+   institution = models.CharField(max_length=100, blank=True, null=True)
    description = models.TextField()
+   eligibility = models.TextField(blank=True, null=True)
+   essay_prompt = models.TextField(blank=True, null=True)
    deadline = models.DateField()
-   link = models.URLField()
+   link = models.URLField(max_length=200, blank=True, null=True)
+   created_at = models.DateTimeField(auto_now_add=True)
    
    def __str__(self):
-      return self.title
+      return self.name
    
+   class Meta:
+      verbose_name_plural = "Scholarships"
