@@ -21,4 +21,8 @@ from core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
+    path('ai/', include('ai_review.urls')), # Include the new ai_review app's URLs
+    
+    # When ready, we'll have these routed
+    #path('', include('users.urls')),
 ]
