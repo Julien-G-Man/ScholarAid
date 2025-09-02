@@ -1,6 +1,99 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-    <h1>AI Review Page</h1>
-    <p>You are requesting an AI review for scholarship ID: {{ scholarship_id }}</p>
+<style>
+    /* New styles for the tabbed interface */
+    .ai-review-form-container {
+        background-color: white;
+        border-radius: 1rem;
+        padding: 2rem 3rem 3rem 3rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    .form-control-lg.custom-textarea {
+        min-height: 400px;
+        font-family: Arial, sans-serif;
+        font-size: 1rem;
+    }
+    .file-upload-box {
+        border: 2px dashed #A31F34;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        text-align: center;
+        background-color: #FCE8E9; /* Using your secondary light brand color */
+    }
+    .nav-link {
+        font-weight: 600;
+        color: #6c757d;
+        border: none;
+        border-bottom: 3px solid transparent;
+        border-radius: 0; /* Remove border radius for a sharp look */
+    }
+    .nav-link.active {
+        color: #A31F34;
+        background-color: transparent;
+        border-bottom: 3px solid #A31F34;
+    }
+    .tab-pane {
+        padding-top: 1.5rem;
+    }
+    .tab-container .col {
+        border-bottom: 3px solid #dee2e6; /* Grey line for visual separation */
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="ai-review-form-container">
+                <h1 class="fw-bold mb-4 text-center">AI Essay Review</h1>
+                <p class="lead text-muted text-center mb-5">
+                    Submit your essay below to get personalized feedback from our AI.
+                    <br>This review is for Scholarship ID: <strong class="text-primary-brand">{{ scholarship_id }}</strong>
+                </p>
+
+                <form action="." method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row text-center mb-4 tab-container">
+                        <div class="col">
+                            <button class="nav-link active w-100" id="text-tab" data-bs-toggle="tab" data-bs-target="#text-pane" type="button" role="tab" aria-controls="text-pane" aria-selected="true">
+                                <i class="bi bi-pencil-square me-2"></i> Enter Text
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button class="nav-link w-100" id="file-tab" data-bs-toggle="tab" data-bs-target="#file-pane" type="button" role="tab" aria-controls="file-pane" aria-selected="false">
+                                <i class="bi bi-cloud-upload me-2"></i> Upload File
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="reviewTabContent">
+                        <div class="tab-pane fade show active" id="text-pane" role="tabpanel" aria-labelledby="text-tab">
+                            <div class="mb-4">
+                                <textarea class="form-control form-control-lg custom-textarea" id="essayText" name="essay_text" placeholder="Start typing or paste your essay content here..." rows="15"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="file-pane" role="tabpanel" aria-labelledby="file-tab">
+                            <div class="file-upload-box">
+                                <span style="font-size: 5rem; color: #A31F34;">📖</span>
+                                <h4 class="fw-bold text-dark mt-3 mb-2">Upload Your Document</h4>
+                                <p class="text-muted mb-4">PDF, DOCX, TXT, or Markdown files are supported.</p>
+                                <label for="essayFile" class="btn btn-primary-brand btn-lg">
+                                    Select file
+                                    <input class="d-none" type="file" id="essayFile" name="essay_file" accept=".pdf,.doc,.docx,.txt,.pptx,.md">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary-brand btn-lg mt-4">Get AI Feedback</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
