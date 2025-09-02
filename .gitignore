@@ -1,3 +1,21 @@
+# Virtual env
+.venv/
+.env.*
 .env
+
+# Django Specific
+*.pyc
+__pycache__/
+db.sqlite3
+media/
+
+# Poject files
+/architecture/*
+project_structure
+.vscode/
 tiktok_embed.html
 Apps.js
+
+/compose/*
+/notes/*
+
