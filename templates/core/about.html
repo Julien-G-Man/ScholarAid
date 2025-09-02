@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <style>
@@ -39,6 +40,23 @@
         transform: translateY(-5px);
         box-shadow: 0 10px 25px rgba(163, 31, 52, 0.15);
     }
+
+    .mission-image-container img {
+      height?: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .mission-image-container {
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mission-img {
+      height: 380px;
+      object-fit: cover;
+    }
+
 </style>
 
 <section class="about-hero">
@@ -48,10 +66,10 @@
     </div>
 </section>
 
-<section class="py-5">
+<section class="py-6">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-md-6 mb-4 mb-md-0">
+            <div class="col-md-5 mb-4 mb-md-0">
                 <h2 class="section-title">Our Mission</h2>
                 <p class="lead">
                     ScholarAid is dedicated to <strong>bridging the gap</strong> between aspiring students and global scholarship opportunities. We believe that access to education is a fundamental right, and our platform is built to make that journey smoother and more accessible for everyone.
@@ -60,8 +78,8 @@
                     We strive to empower students by providing reliable, curated, and easily accessible information on scholarships tailored to various fields and academic levels. Our goal is to unlock potential and foster educational growth.
                 </p>
             </div>
-            <div class="col-md-6">
-                <img src="https://source.unsplash.com/600x400/?mission,education" class="img-fluid rounded-4 shadow-lg" alt="Our Mission">
+            <div class="col-md-7">
+                <img src="{% static 'img/discussion.jpeg' %}" class="img-fluid rounded-4 shadow-lg mission-img" alt="Mission Image">
             </div>
         </div>
     </div>
@@ -115,7 +133,7 @@
                 </p>
             </div>
             <div class="col-md-6">
-                <img src="https://source.unsplash.com/600x400/?vision,future" class="img-fluid rounded-4 shadow-lg" alt="Our Vision">
+                <img src="{% static 'img/graduation.png' %}" class="img-fluid rounded-4 shadow-lg" alt="Vision Image">
             </div>
         </div>
     </div>

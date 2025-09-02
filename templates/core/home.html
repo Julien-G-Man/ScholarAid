@@ -120,29 +120,29 @@
     <div class="container">
         <h2 class="text-center mb-5 fw-bold text-primary-brand">Featured Scholarships</h2>
         <div class="row g-4">
-            {% for scholarobj in object_list %}
+            {% for scholarship in object_list %}
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm rounded-4 scholarship-card">
                         <div class="card-body d-flex flex-column p-4">
-                            {% if scholarobj.institution %}
+                            {% if scholarship.institution %}
                                 <div class="text-center mb-3">
-                                    <img src="{{ scholarobj.institution }}" class="img-fluid"
-                                        alt="{{ scholarobj.title }}"
+                                    <img src="{{ scholarship.institution }}" class="img-fluid"
+                                        alt="{{ scholarship.name }}"
                                         style="max-height: 100px; object-fit: contain;">
                                 </div>
                             {% endif %}
                             <h5 class="card-title fw-bold">
-                                <a href="{% url 'scholarship_detail' scholarobj.id %}" class="text-decoration-none text-dark">
-                                    {{ scholarobj.title }}
+                                <a href="{% url 'scholarship_detail' scholarship.id %}" class="text-decoration-none text-dark">
+                                    {{ scholarship.name }}
                                 </a>
                             </h5>
                             <p class="card-text text-muted small flex-grow-1">
-                                {{ scholarobj.description|truncatewords:20 }}
+                                {{ scholarship.description|truncatewords:20 }}
                             </p>
                         </div>
                         <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center p-4 pt-0">
-                            <small class="text-muted">⏳ Deadline: {{ scholarobj.deadline|date:"M d, Y" }}</small>
-                            <a href="{% url 'scholarship_detail' scholarobj.id %}" class="btn btn-sm btn-outline-primary-brand rounded-pill">
+                            <small class="text-muted">⏳ Deadline: {{ scholarship.deadline|date:"M d, Y" }}</small>
+                            <a href="{% url 'scholarship_detail' scholarship.id %}" class="btn btn-sm btn-outline-primary-brand rounded-pill">
                                 Learn More
                             </a>
                         </div>
