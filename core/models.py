@@ -21,3 +21,11 @@ class Scholarships(models.Model):
    
    class Meta:
       verbose_name_plural = "Scholarships"
+
+# Handles newsletter subscriptions      
+class NewsletterSubscription(models.Model):
+    email = models.EmailField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email      

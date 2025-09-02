@@ -164,4 +164,22 @@
         </a>
     </div>
 </section>
+
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3 text-primary-brand">Stay Updated on Scholarships</h2>
+        <p class="lead mb-4">
+            Get the latest scholarships and tips delivered straight to your inbox.
+        </p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form action="{% url 'newsletter_subscribe' %}" method="post" class="d-flex flex-column flex-sm-row gap-2">
+                    {% csrf_token %}
+                    <input type="email" name="email" class="form-control form-control-lg rounded-pill" placeholder="Enter your email address" required>
+                    <button type="submit" class="btn btn-primary-brand btn-lg rounded-pill">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
