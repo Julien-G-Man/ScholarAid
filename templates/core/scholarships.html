@@ -56,6 +56,11 @@
                                     {{ scholarship.name }}
                                 </a>
                             </h5>
+                            <h6 class="fw-bold text-primary-brand">
+                                <a href="{% url 'scholarship_detail' scholarship.id %}" class="text-decoration-none text-dark">
+                                    {{ scholarship.institution }}
+                                </a>
+                            </h6>
                             <p class="card-text text-muted small flex-grow-1">
                                 {{ scholarship.description|truncatewords:40 }}
                             </p>
@@ -65,7 +70,7 @@
                             </ul>
                         </div>
                         <div class="card-footer bg-white border-0 d-flex justify-content-end align-items-center p-4 pt-0">
-                            <a href="{% url 'scholarship_detail' scholarship.id %}" class="btn btn-sm btn-outline-primary-brand rounded-pill">
+                            <a href="{{ scholarship.link }}" class="btn btn-sm btn-outline-primary-brand rounded-pill">
                                 Visit Official Page
                             </a>
                         </div>
