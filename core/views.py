@@ -17,7 +17,11 @@ def home(request):
    return render(request, 'core/home.html', context)
 
 def scholarships(request):
-   return render(request, 'core/scholarships.html')
+   all_scholarships = Scholarships.objects.all()
+   context = {
+      'all_scholarships': all_scholarships
+   }
+   return render(request, 'core/scholarships.html', context)
 
 def scholarship_detail(request):
    return render(request, 'scholarships.html')

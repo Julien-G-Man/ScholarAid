@@ -14,7 +14,8 @@ class Scholarships(models.Model):
    eligibility = models.TextField(blank=True, null=True)
    essay_prompt = models.TextField(blank=True, null=True)
    deadline = models.DateField(blank=True, null=True)
-   link = models.URLField(max_length=200, blank=True, null=True)
+   link = models.URLField(max_length=300, blank=True, null=True)
+   logo_url = models.CharField(max_length=300, blank=True, null=True)
    created_at = models.DateTimeField(auto_now_add=True)
    
    def __str__(self):
