@@ -6,9 +6,6 @@ from .models import NewsletterSubscription
 from .models import Scholarships
 
 # Create your views here.
-def base(request):
-   return render(request, 'base.html')
-
 def home(request):
    featured_scholarships = Scholarships.objects.order_by('-created_at')[:3]
    context = {
