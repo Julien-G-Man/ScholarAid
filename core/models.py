@@ -9,6 +9,7 @@ class Scholarships(models.Model):
    name = models.CharField(max_length=200)
    provider = models.CharField(max_length=100)
    institution = models.CharField(max_length=100, blank=True, null=True)
+   level = models.CharField(max_length=30, blank=True, null=True)
    description = models.TextField()
    eligibility = models.TextField(blank=True, null=True)
    essay_prompt = models.TextField(blank=True, null=True)
