@@ -10,9 +10,9 @@ def base(request):
    return render(request, 'base.html')
 
 def home(request):
-   all_scholarships = Scholarships.objects.all()
+   featured_scholarships = Scholarships.objects.order_by('-created_at')[:3]
    context = {
-      'all_scholarships': all_scholarships
+      'featured_scholarships': featured_scholarships
    }
    return render(request, 'core/home.html', context)
 
