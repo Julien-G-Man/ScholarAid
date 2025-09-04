@@ -28,20 +28,20 @@
     background-color: var(--primary-brand-red);
     color: white;
     border: none;
-}
-.btn-primary-brand:hover {
-    background-color: #8E1B2C;
-    color: white;
-}
-.btn-outline-primary-brand {
-    color: var(--primary-brand-red);
-    border: 2px solid var(--primary-brand-red);
-    background-color: transparent;
-}
-.btn-outline-primary-brand:hover {
-    background-color: var(--primary-brand-red);
-    color: white;
-}
+    }
+    .btn-primary-brand:hover {
+        background-color: #8E1B2C;
+        color: white;
+    }
+    .btn-outline-primary-brand {
+        color: var(--primary-brand-red);
+        border: 2px solid var(--primary-brand-red);
+        background-color: transparent;
+    }
+    .btn-outline-primary-brand:hover {
+        background-color: var(--primary-brand-red);
+        color: white;
+    }
 
 </style>
 
@@ -53,7 +53,7 @@
         </div>
     </div>
     
-    <div class="row detail-card">
+    <div class="row flex-column-reverse flex-lg-row detail-card">
         <div class="col-lg-8">
             <div class="detail-section mb-5">
                 <h2>Description</h2>
@@ -61,7 +61,7 @@
             </div>
 
             <div class="detail-section mb-5">
-                <h2>Eligibility</h2>
+                <h2>Eligibility Criteria</h2>
                 <p>{{ scholarship.eligibility|linebreaksbr }}</p>
             </div>
 
@@ -72,27 +72,26 @@
             </div>
             {% endif %}
         </div>
-        
+    
         <div class="col-lg-4">
             <div class="d-flex flex-column align-items-center mb-4">
                 {% if scholarship.logo_url %}
                     <img src="{{ scholarship.logo_url }}" alt="{{ scholarship.name }} Logo" class="logo-img mb-3">
                 {% endif %}
             </div>
-            
+        
             <ul class="list-group list-group-flush">
                 <li class="list-group-item"><strong>Provider:</strong> {{ scholarship.provider }}</li>
                 <li class="list-group-item"><strong>Institution:</strong> {{ scholarship.institution|default:"N/A" }}</li>
                 <li class="list-group-item"><strong>Level:</strong> {{ scholarship.level|default:"N/A" }}</li>
                 <li class="list-group-item"><strong>Deadline:</strong> {{ scholarship.deadline|date:"F j, Y" }}</li>
             </ul>
-
-            <div class="text-center mt-4">
-                <a href="{{ scholarship.link }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-brand btn-lg rounded-pill">
-                    Visit Official Page
-                </a>
-            </div>
-        </div>
+        </div>     
+    </div>
+    <div class="text-center mt-4">
+        <a href="{{ scholarship.link }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-brand btn-lg rounded-pill">
+            Visit Official Page
+        </a>
     </div>
 </div>
 {% endblock %}
