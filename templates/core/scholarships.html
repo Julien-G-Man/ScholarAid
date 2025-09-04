@@ -28,6 +28,31 @@
         transform: translateY(-8px);
         box-shadow: 0 12px 30px rgba(163, 31, 52, 0.2);
     }
+    .btn-primary-brand {
+        background-color: var(--primary-brand-red);
+        color: white;
+        border: none;
+    }
+    .btn-primary-brand:hover {
+        background-color: #8E1B2C;
+        color: white;
+    }   
+    .btn-outline-primary-brand {
+        color: var(--primary-brand-red);
+        border: 2px solid var(--primary-brand-red);
+        background-color: transparent;
+    }
+    .btn-outline-primary-brand:hover {
+        background-color: var(--primary-brand-red);
+        color: white;
+    }
+    .btn-xs { # "Learn More" button size
+        padding: .25rem .5rem;
+        font-size: 1.0rem;
+        line-height: 1.5;
+        border-radius: .5rem;
+    }
+
 </style>
 
 <section class="scholarships-hero d-flex flex-column justify-content-center align-items-center">
@@ -66,9 +91,12 @@
                                 <li class="text-muted"><strong>Deadline:</strong> {{ scholarship.deadline|date:"M d, Y" }}</li>
                             </ul>
                         </div>
-                        <div class="card-footer bg-white border-0 d-flex justify-content-end align-items-center p-4 pt-0">
-                            <a href="{{ scholarship.link }}" class="btn btn-sm btn-outline-primary-brand rounded-pill">
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center p-4 pt-0">
+                            <a href="{{ scholarship.link }}" class="btn btn-sm btn-primary-brand rounded-pill btn-xs">
                                 Visit Official Page
+                            </a>   
+                            <a href="{% url 'scholarship_detail' scholarship.id %}" class="btn btn-sm btn-outline-primary-brand rounded-pill">
+                                Learn More
                             </a>
                         </div>
                     </div>

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .detail-section h2 {
+        color: var(--primary-brand-red);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .detail-card {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 2.5rem;
+        margin-top: 2rem;
+    }
+    .list-group-item {
+        border: none;
+        padding-left: 0;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+    .logo-img {
+        max-height: 150px;
+        object-fit: contain;
+    }
+    .btn-primary-brand {
+    background-color: var(--primary-brand-red);
+    color: white;
+    border: none;
+}
+.btn-primary-brand:hover {
+    background-color: #8E1B2C;
+    color: white;
+}
+.btn-outline-primary-brand {
+    color: var(--primary-brand-red);
+    border: 2px solid var(--primary-brand-red);
+    background-color: transparent;
+}
+.btn-outline-primary-brand:hover {
+    background-color: var(--primary-brand-red);
+    color: white;
+}
+
+</style>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12 text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary-brand">{{ scholarship.name }}</h1>
+            <p class="lead text-muted">{{ scholarship.provider }}</p>
+        </div>
+    </div>
+    
+    <div class="row detail-card">
+        <div class="col-lg-8">
+            <div class="detail-section mb-5">
+                <h2>Description</h2>
+                <p>{{ scholarship.description|linebreaksbr }}</p>
+            </div>
+
+            <div class="detail-section mb-5">
+                <h2>Eligibility</h2>
+                <p>{{ scholarship.eligibility|linebreaksbr }}</p>
+            </div>
+
+            {% if scholarship.essay_prompt %}
+            <div class="detail-section mb-5">
+                <h2>Essay Prompt</h2>
+                <p>{{ scholarship.essay_prompt|linebreaksbr }}</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="d-flex flex-column align-items-center mb-4">
+                {% if scholarship.logo_url %}
+                    <img src="{{ scholarship.logo_url }}" alt="{{ scholarship.name }} Logo" class="logo-img mb-3">
+                {% endif %}
+            </div>
+            
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Provider:</strong> {{ scholarship.provider }}</li>
+                <li class="list-group-item"><strong>Institution:</strong> {{ scholarship.institution|default:"N/A" }}</li>
+                <li class="list-group-item"><strong>Level:</strong> {{ scholarship.level|default:"N/A" }}</li>
+                <li class="list-group-item"><strong>Deadline:</strong> {{ scholarship.deadline|date:"F j, Y" }}</li>
+            </ul>
+
+            <div class="text-center mt-4">
+                <a href="{{ scholarship.link }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-brand btn-lg rounded-pill">
+                    Visit Official Page
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
