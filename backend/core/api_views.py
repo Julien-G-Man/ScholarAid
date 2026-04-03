@@ -5,7 +5,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Scholarships, NewsletterSubscription, ContactMessage
-from .serializers import ScholarshipSerializer, NewsletterSubscribeSerializer, ContactSerializer
+from .serializers import (
+    ScholarshipSerializer,
+    NewsletterSubscribeSerializer,
+    ContactSerializer,
+    ScholarshipQuerySerializer,
+)
 
 
 class ScholarshipListView(generics.ListAPIView):
@@ -20,8 +25,10 @@ class ScholarshipListView(generics.ListAPIView):
 
     def get_queryset(self):
         qs = Scholarships.objects.all().order_by('-created_at')
-        search = self.request.query_params.get('search', '').strip()
-        level = self.request.query_params.get('level', '').strip()
+        query_serializer = ScholarshipQuerySerializer(data=self.request.query_params)
+        query_serializer.is_valid(raise_exception=True)
+        search = query_serializer.validated_data.get('search', '')
+        level = query_serializer.validated_data.get('level', '')
         if search:
             qs = qs.filter(
                 Q(name__icontains=search)
