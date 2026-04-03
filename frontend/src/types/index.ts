@@ -25,12 +25,20 @@ export interface AuthTokens {
   refresh: string;
 }
 
+export interface UserProfile {
+  bio: string;
+  institution: string;
+  field_of_study: string;
+  country: string;
+}
+
 export interface User {
   id: number;
   username: string;
   email: string;
   first_name: string;
   last_name: string;
+  profile?: UserProfile;
 }
 
 export interface AuthResponse extends AuthTokens {

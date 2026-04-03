@@ -1,4 +1,35 @@
+'use client';
+
+import { useState } from 'react';
+import api from '@/services/api';
+
+interface Fields { name: string; email: string; subject: string; message: string }
+const EMPTY: Fields = { name: '', email: '', subject: '', message: '' };
+
 export default function ContactPage() {
+  const [fields, setFields] = useState<Fields>(EMPTY);
+  const [status, setStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setFields((f) => ({ ...f, [e.target.id]: e.target.value }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setStatus(null);
+    try {
+      const res = await api.submitContact(fields);
+      setStatus({ type: 'success', text: res.message });
+      setFields(EMPTY);
+    } catch {
+      setStatus({ type: 'error', text: 'Failed to send your message. Please try again.' });
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <>
       <section className="contact-hero d-flex flex-column justify-content-center align-items-center">
@@ -42,27 +73,34 @@ export default function ContactPage() {
 
           <h2 className="section-title text-center">Send Us a Message</h2>
           <div className="contact-form-container">
-            <form>
+            {status && (
+              <div className={`alert alert-${status.type === 'success' ? 'success' : 'danger'} mb-4`}>
+                {status.text}
+              </div>
+            )}
+            <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-md-6 mb-4">
                   <label htmlFor="name" className="form-label fw-semibold">Your Name</label>
-                  <input type="text" className="form-control rounded-3" id="name" placeholder="E.g., John Doe" required />
+                  <input type="text" className="form-control rounded-3" id="name" value={fields.name} onChange={handleChange} placeholder="E.g., John Doe" required />
                 </div>
                 <div className="col-md-6 mb-4">
                   <label htmlFor="email" className="form-label fw-semibold">Your Email</label>
-                  <input type="email" className="form-control rounded-3" id="email" placeholder="E.g., john.doe@example.com" required />
+                  <input type="email" className="form-control rounded-3" id="email" value={fields.email} onChange={handleChange} placeholder="E.g., john.doe@example.com" required />
                 </div>
               </div>
               <div className="mb-4">
                 <label htmlFor="subject" className="form-label fw-semibold">Subject</label>
-                <input type="text" className="form-control rounded-3" id="subject" placeholder="E.g., Scholarship Inquiry" />
+                <input type="text" className="form-control rounded-3" id="subject" value={fields.subject} onChange={handleChange} placeholder="E.g., Scholarship Inquiry" />
               </div>
               <div className="mb-4">
                 <label htmlFor="message" className="form-label fw-semibold">Your Message</label>
-                <textarea className="form-control rounded-3" id="message" rows={6} placeholder="Type your message here…" required style={{ minHeight: '150px', resize: 'vertical' }} />
+                <textarea className="form-control rounded-3" id="message" rows={6} value={fields.message} onChange={handleChange} placeholder="Type your message here…" required style={{ minHeight: '150px', resize: 'vertical' }} />
               </div>
               <div className="d-grid">
-                <button type="submit" className="btn btn-primary-brand btn-lg rounded-pill">Send Message</button>
+                <button type="submit" className="btn btn-primary-brand btn-lg rounded-pill" disabled={loading}>
+                  {loading ? 'Sending…' : 'Send Message'}
+                </button>
               </div>
             </form>
           </div>
