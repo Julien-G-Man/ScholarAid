@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import authService from '@/services/authService';
+import PasswordInput from '@/components/PasswordInput';
 
 export default function ProfilePage() {
   const { user, setUser, logout, initialising } = useAuth();
@@ -221,10 +222,9 @@ export default function ProfilePage() {
 
               <div className="mb-3">
                 <label className="form-label fw-semibold">Current password</label>
-                <input
-                  type="password"
+                <PasswordInput
+                  id="old_password"
                   name="old_password"
-                  className="form-control form-control-lg rounded-3"
                   value={passwordFields.old_password}
                   onChange={handlePasswordChange}
                   required
@@ -232,10 +232,9 @@ export default function ProfilePage() {
               </div>
               <div className="mb-3">
                 <label className="form-label fw-semibold">New password</label>
-                <input
-                  type="password"
+                <PasswordInput
+                  id="new_password"
                   name="new_password"
-                  className="form-control form-control-lg rounded-3"
                   value={passwordFields.new_password}
                   onChange={handlePasswordChange}
                   required
@@ -243,10 +242,9 @@ export default function ProfilePage() {
               </div>
               <div className="mb-4">
                 <label className="form-label fw-semibold">Confirm new password</label>
-                <input
-                  type="password"
+                <PasswordInput
+                  id="new_password_2"
                   name="new_password_2"
-                  className="form-control form-control-lg rounded-3"
                   value={passwordFields.new_password_2}
                   onChange={handlePasswordChange}
                   required

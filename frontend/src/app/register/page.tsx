@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import authService from '@/services/authService';
 import { useAuth } from '@/context/AuthContext';
+import PasswordInput from '@/components/PasswordInput';
 
 interface Fields {
   username: string;
@@ -116,8 +117,30 @@ export default function RegisterPage() {
             </div>
             {field('username', 'Username')}
             {field('email', 'Email', 'email')}
-            {field('password', 'Password', 'password')}
-            {field('password2', 'Confirm password', 'password')}
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label fw-semibold">Password</label>
+              <PasswordInput
+                id="password"
+                name="password"
+                value={fields.password}
+                onChange={handleChange}
+                className={`form-control form-control-lg rounded-3${errors.password ? ' is-invalid' : ''}`}
+                required
+              />
+              {errors.password && <div className="invalid-feedback d-block">{errors.password}</div>}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="password2" className="form-label fw-semibold">Confirm password</label>
+              <PasswordInput
+                id="password2"
+                name="password2"
+                value={fields.password2}
+                onChange={handleChange}
+                className={`form-control form-control-lg rounded-3${errors.password2 ? ' is-invalid' : ''}`}
+                required
+              />
+              {errors.password2 && <div className="invalid-feedback d-block">{errors.password2}</div>}
+            </div>
 
             <div className="d-grid mt-2 mb-4">
               <button type="submit" className="btn btn-primary-brand btn-lg rounded-pill" disabled={loading}>

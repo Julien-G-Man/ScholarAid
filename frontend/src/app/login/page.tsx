@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import PasswordInput from '@/components/PasswordInput';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -87,11 +88,9 @@ export default function LoginPage() {
             </div>
             <div className="mb-4">
               <label htmlFor="password" className="form-label fw-semibold">Password</label>
-              <input
-                type="password"
+              <PasswordInput
                 id="password"
                 name="password"
-                className="form-control form-control-lg rounded-3"
                 value={fields.password}
                 onChange={handleChange}
                 required

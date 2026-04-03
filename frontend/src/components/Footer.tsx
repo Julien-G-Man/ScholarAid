@@ -4,11 +4,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
-const AUTH_PATHS = ['/login', '/register'];
+const HIDDEN_FOOTER_PATHS = ['/login', '/register', '/dashboard', '/profile'];
+const HIDDEN_FOOTER_PREFIXES = ['/ai-prep', '/ai-review'];
 
 export default function Footer() {
   const pathname = usePathname();
-  if (AUTH_PATHS.includes(pathname)) return null;
+  if (
+    HIDDEN_FOOTER_PATHS.includes(pathname) ||
+    HIDDEN_FOOTER_PREFIXES.some((prefix) => pathname.startsWith(prefix))
+  ) {
+    return null;
+  }
 
   return (
     <footer style={{ background: '#1a1a2e', borderTop: '4px solid var(--primary-brand-red)', color: '#adb5bd' }}>

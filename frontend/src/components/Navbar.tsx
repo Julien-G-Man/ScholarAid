@@ -47,7 +47,6 @@ export default function Navbar() {
 
             {user ? (
               <>
-                <li className="nav-item"><Link className="nav-link" href="/dashboard">Dashboard</Link></li>
                 <li className="nav-item"><Link className="nav-link" href="/ai-prep">AI Prep</Link></li>
                 <li className="nav-item">
                   <Link className="nav-link" href="/profile">
@@ -56,6 +55,11 @@ export default function Navbar() {
                   </Link>
                 </li>
                 <li className="nav-item ms-lg-2">
+                  <Link className="btn btn-light btn-sm rounded-pill px-3 text-primary-brand fw-semibold" href="/dashboard">
+                    Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item ms-lg-1">
                   <button
                     onClick={handleLogout}
                     className="btn btn-outline-light btn-sm rounded-pill px-3"

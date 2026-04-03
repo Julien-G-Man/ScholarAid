@@ -1,10 +1,8 @@
 import Link from 'next/link';
-import ScholarshipCard from '@/components/ScholarshipCard';
 import NewsletterForm from '@/components/NewsletterForm';
-import { fetchFeaturedScholarships } from '@/lib/serverApi';
+import FeaturedScholarships from '@/components/FeaturedScholarships';
 
-export default async function HomePage() {
-  const featured = await fetchFeaturedScholarships();
+export default function HomePage() {
 
   return (
     <>
@@ -59,21 +57,11 @@ export default async function HomePage() {
       <section className="py-5 bg-light-brand">
         <div className="container">
           <h2 className="text-center mb-5 fw-bold text-primary-brand">Featured Scholarships</h2>
-          <div className="row g-4">
-            {featured.length > 0 ? (
-              featured.map((s) => (
-                <div className="col-md-4" key={s.id}>
-                  <ScholarshipCard scholarship={s} />
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-muted">No scholarships available right now. Check back soon!</p>
-            )}
-            <div className="text-center mt-4">
-              <Link href="/scholarships" className="btn btn-primary-brand btn-lg rounded-pill">
-                View All Scholarships
-              </Link>
-            </div>
+          <FeaturedScholarships />
+          <div className="text-center mt-4">
+            <Link href="/scholarships" className="btn btn-primary-brand btn-lg rounded-pill">
+              View All Scholarships
+            </Link>
           </div>
         </div>
       </section>
