@@ -1,6 +1,5 @@
-from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-from .models import Scholarships, NewsletterSubscription
+from .models import Scholarships, NewsletterSubscription, ContactMessage
 
 
 class ScholarshipSerializer(serializers.ModelSerializer):
@@ -24,3 +23,9 @@ class NewsletterSubscribeSerializer(serializers.ModelSerializer):
         if NewsletterSubscription.objects.filter(email=value).exists():
             raise serializers.ValidationError('This email is already subscribed.')
         return value
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactMessage
+        fields = ['name', 'email', 'subject', 'message']

@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './globals.css';
+import Providers from '@/components/Providers';
+import BootstrapClient from '@/components/BootstrapClient';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import BootstrapClient from '@/components/BootstrapClient';
 
 export const metadata: Metadata = {
   title: 'ScholarAid',
@@ -15,10 +16,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <BootstrapClient />
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <Providers>
+          <BootstrapClient />
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
