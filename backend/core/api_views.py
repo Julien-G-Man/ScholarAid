@@ -45,9 +45,10 @@ class FeaturedScholarshipsView(generics.ListAPIView):
     """GET /api/v1/scholarships/featured/ — 3 most-recent scholarships for the homepage."""
     serializer_class = ScholarshipSerializer
     permission_classes = [AllowAny]
+    pagination_class = None
 
     def get_queryset(self):
-        return Scholarships.objects.order_by('-created_at')[:3]
+        return Scholarships.objects.order_by('-created_at', '-id')[:3]
 
 
 class NewsletterSubscribeView(APIView):

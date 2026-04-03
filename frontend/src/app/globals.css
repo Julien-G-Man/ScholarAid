@@ -47,13 +47,16 @@ a:hover { color: #8E1B2C; }
 }
 
 /* ── Footer ── */
-footer {
-  background-color: #212529;
-  border-top: 5px solid var(--primary-brand-red);
-  color: #ccc;
+.footer-link {
+  color: #adb5bd;
+  transition: color 0.2s ease;
 }
-footer a { color: white; }
-footer a:hover { text-decoration: underline; }
+.footer-link:hover { color: white; }
+.footer-icon {
+  color: #adb5bd;
+  transition: color 0.2s ease;
+}
+.footer-icon:hover { color: white; }
 
 /* ── Utility brand classes ── */
 .text-primary-brand { color: var(--primary-brand-red) !important; }
@@ -80,8 +83,8 @@ footer a:hover { text-decoration: underline; }
 
 /* ── Hero ── */
 .hero {
-  background: linear-gradient(rgba(163,31,52,0.9), rgba(163,31,52,0.9)),
-              url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600') center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+              url('/img/graduation.png') center/cover no-repeat;
   min-height: 80vh;
   display: flex;
   align-items: center;
@@ -89,8 +92,8 @@ footer a:hover { text-decoration: underline; }
   color: white;
 }
 .page-hero {
-  background: linear-gradient(rgba(163,31,52,0.85), rgba(163,31,52,0.85)),
-              url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600') center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+              url('/img/asu_students.jpg') center/cover no-repeat;
   min-height: 40vh;
   display: flex;
   align-items: center;
@@ -99,8 +102,8 @@ footer a:hover { text-decoration: underline; }
   margin-bottom: 3rem;
 }
 .contact-hero {
-  background: linear-gradient(rgba(163,31,52,0.9), rgba(163,31,52,0.9)),
-              url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600') center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+              url('/img/discussion.jpeg') center/cover no-repeat;
   min-height: 50vh;
   display: flex;
   align-items: center;
@@ -109,9 +112,22 @@ footer a:hover { text-decoration: underline; }
   margin-bottom: 4rem;
 }
 .cta-section {
-  background: linear-gradient(rgba(163,31,52,0.95), rgba(163,31,52,0.95)),
-              url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1600') center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+              url('/img/fulbright_students.jpg') center/cover no-repeat;
   color: white;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-attachment: fixed;
+  background-position: center center;
+}
+
+@media (max-width: 991.98px) {
+  .cta-section {
+    min-height: 55vh;
+    background-attachment: scroll;
+  }
 }
 
 /* ── Cards ── */

@@ -1,16 +1,20 @@
 """
 Django settings for ScholarPro project.
 """
-
-from pathlib import Path
 import os
+from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
+
+try:
+    import dj_database_url
+except ImportError:
+    dj_database_url = None
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load variables from .env
 load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dev-key-change-in-production')
@@ -19,7 +23,6 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
-# Frontend URL (Next.js)
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
 
 
@@ -78,12 +81,32 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# - Local development defaults to SQLite
+# - Production can provide DATABASE_URL for PostgreSQL
+DATABASE_URL = os.getenv('DATABASE_URL')
+DB_CONN_MAX_AGE = int(os.getenv('DB_CONN_MAX_AGE', '600'))
+DB_SSL_REQUIRE = os.getenv('DB_SSL_REQUIRE', 'False' if DEBUG else 'True') == 'True'
+
+if DATABASE_URL:
+    if dj_database_url is None:
+        raise ImproperlyConfigured(
+            "DATABASE_URL is set but 'dj-database-url' is not installed. "
+            "Run: python -m pip install -r requirements.txt"
+        )
+    DATABASES = {
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=DB_CONN_MAX_AGE,
+            ssl_require=DB_SSL_REQUIRE,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation

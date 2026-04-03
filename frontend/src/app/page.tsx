@@ -19,10 +19,19 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Why ScholarAid */}
+      {/* Platform Details */}
       <section className="py-5">
-        <div className="container text-center">
-          <h2 className="fw-bold mb-5 text-primary-brand">Why Choose ScholarAid?</h2>
+        <div className="container">
+          <div className="row justify-content-center mb-5">
+            <div className="col-lg-10 text-center">
+              <p className="lead text-muted mb-0">
+                ScholarAid helps students discover trusted scholarship opportunities, understand requirements quickly,
+                and improve application quality with practical AI-assisted feedback.
+              </p>
+            </div>
+          </div>
+
+          <h3 className="fw-bold mb-4 text-primary-brand text-center">What ScholarAid Has to Offer</h3>
           <div className="row g-4">
             <div className="col-md-4">
               <div className="feature-box p-4 shadow-sm rounded-4 h-100 bg-white">

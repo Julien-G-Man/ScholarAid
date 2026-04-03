@@ -1,21 +1,61 @@
-# Virtual env
-.venv/
-.env.*
-.env
-
-# Django Specific
-*.pyc
+# Python / Django
 __pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+.Python
+.venv/
+venv/
+env/
+ENV/
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.sqlite3
 db.sqlite3
 media/
+backend/media/
+backend/staticfiles/
+backend/templates/
 
-# Poject files
-/architecture/*
-project_structure
+# Django / local settings
+local_settings.py
+*.log
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+coverage/
+.turbo/
+.vercel/
+frontend/next-env.d.ts
+*.tsbuildinfo
+
+# Package manager caches
+.pnp.*
+.yarn/
+.pnpm-store/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
 .vscode/
-tiktok_embed.html
-Apps.js
+.idea/
 
-/compose/*
-/notes/*
-
+# Misc build artifacts
+dist/
+build/
+tmp/
+temp/

@@ -56,7 +56,7 @@ export default function RegisterPage() {
           type={type}
           id={name}
           name={name}
-          className={`form-control rounded-3${errors[name] ? ' is-invalid' : ''}`}
+          className={`form-control form-control-lg rounded-3${errors[name] ? ' is-invalid' : ''}`}
           value={fields[name]}
           onChange={handleChange}
           required
@@ -67,38 +67,69 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="bg-white rounded-4 shadow-sm p-4 p-md-5">
-            <h1 className="fw-bold text-primary-brand text-center mb-4">Create an account</h1>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - 80px)' }}>
+      {/* Left — brand panel */}
+      <div
+        className="d-none d-lg-flex flex-column justify-content-center align-items-center text-white px-5"
+        style={{
+          flex: '0 0 40%',
+          background:
+            'linear-gradient(160deg, rgba(26,26,46,0.86) 0%, rgba(26,26,46,0.94) 100%), url("/img/discussion.jpeg") center/cover no-repeat',
+        }}
+      >
+        <i className="bi bi-person-plus-fill mb-4" style={{ fontSize: '4rem', opacity: 0.9 }} />
+        <h2 className="fw-bold fs-1 text-center mb-3">Join ScholarAid</h2>
+        <p className="text-center mb-0" style={{ opacity: 0.85, fontSize: '1.1rem', maxWidth: 320 }}>
+          Create a free account to browse scholarships, track deadlines, and get AI-powered application feedback.
+        </p>
+        <div className="mt-5 pt-2 text-center" style={{ opacity: 0.6, fontSize: '0.85rem' }}>
+          Already have an account?{' '}
+          <Link href="/login" className="text-white fw-semibold" style={{ textDecoration: 'underline' }}>
+            Login
+          </Link>
+        </div>
+      </div>
 
-            {errors.non_field_errors && (
-              <div className="alert alert-danger">{errors.non_field_errors}</div>
-            )}
+      {/* Right — form panel */}
+      <div className="d-flex flex-column justify-content-center align-items-center flex-grow-1 px-4 py-5 bg-white">
+        <div style={{ width: '100%', maxWidth: 480 }}>
+          <div
+            className="d-lg-none rounded-4 mb-4"
+            style={{
+              height: 170,
+              background:
+                'linear-gradient(160deg, rgba(26,26,46,0.7) 0%, rgba(26,26,46,0.8) 100%), url("/img/fulbright_students.jpg") center/cover no-repeat',
+            }}
+          />
 
-            <form onSubmit={handleSubmit}>
-              <div className="row">
-                <div className="col-sm-6">{field('first_name', 'First name')}</div>
-                <div className="col-sm-6">{field('last_name', 'Last name')}</div>
-              </div>
-              {field('username', 'Username')}
-              {field('email', 'Email', 'email')}
-              {field('password', 'Password', 'password')}
-              {field('password2', 'Confirm password', 'password')}
+          <h1 className="fw-bold text-primary-brand mb-1">Create an account</h1>
+          <p className="text-muted mb-4">Fill in the details below to get started.</p>
 
-              <div className="d-grid mt-2 mb-3">
-                <button type="submit" className="btn btn-primary-brand btn-lg rounded-pill" disabled={loading}>
-                  {loading ? 'Creating account…' : 'Register'}
-                </button>
-              </div>
-            </form>
+          {errors.non_field_errors && (
+            <div className="alert alert-danger py-2">{errors.non_field_errors}</div>
+          )}
 
-            <p className="text-center text-muted mb-0">
-              Already have an account?{' '}
-              <Link href="/login" className="fw-semibold">Login</Link>
-            </p>
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="row g-3">
+              <div className="col-sm-6">{field('first_name', 'First name')}</div>
+              <div className="col-sm-6">{field('last_name', 'Last name')}</div>
+            </div>
+            {field('username', 'Username')}
+            {field('email', 'Email', 'email')}
+            {field('password', 'Password', 'password')}
+            {field('password2', 'Confirm password', 'password')}
+
+            <div className="d-grid mt-2 mb-4">
+              <button type="submit" className="btn btn-primary-brand btn-lg rounded-pill" disabled={loading}>
+                {loading ? 'Creating account…' : 'Register'}
+              </button>
+            </div>
+          </form>
+
+          <p className="text-center text-muted d-lg-none mb-0">
+            Already have an account?{' '}
+            <Link href="/login" className="fw-semibold">Login</Link>
+          </p>
         </div>
       </div>
     </div>
