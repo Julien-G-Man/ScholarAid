@@ -64,6 +64,14 @@ const authService = {
     return axiosInstance.patch<User>('/auth/profile/', data).then((r) => r.data);
   },
 
+  changePassword(data: {
+    old_password: string;
+    new_password: string;
+    new_password_2: string;
+  }): Promise<{ message: string }> {
+    return axiosInstance.post<{ message: string }>('/auth/change-password/', data).then((r) => r.data);
+  },
+
   // ─── Helpers ───────────────────────────────────────────────────────────────
 
   isAuthenticated(): boolean {

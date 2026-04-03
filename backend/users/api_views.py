@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -79,3 +80,50 @@ class ProfileView(APIView):
             profile_serializer.save()
 
         return Response(UserSerializer(request.user).data)
+
+
+class ChangePasswordView(APIView):
+    """POST /api/v1/auth/change-password/"""
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        new_password_2 = request.data.get('new_password_2')
+
+        # Validate inputs
+        if not all([old_password, new_password, new_password_2]):
+            return Response(
+                {'error': 'All fields are required.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if new_password != new_password_2:
+            return Response(
+                {'error': 'New passwords do not match.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Verify old password
+        if not request.user.check_password(old_password):
+            return Response(
+                {'error': 'Old password is incorrect.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Validate new password strength (Django's default validators)
+        from django.contrib.auth.password_validation import validate_password
+        from django.core.exceptions import ValidationError
+        try:
+            validate_password(new_password, user=request.user)
+        except ValidationError as e:
+            return Response({'error': ' '.join(e.messages)}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Set new password
+        request.user.set_password(new_password)
+        request.user.save()
+
+        return Response(
+            {'message': 'Password changed successfully.'},
+            status=status.HTTP_200_OK
+        )

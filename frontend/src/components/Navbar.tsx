@@ -47,6 +47,8 @@ export default function Navbar() {
 
             {user ? (
               <>
+                <li className="nav-item"><Link className="nav-link" href="/dashboard">Dashboard</Link></li>
+                <li className="nav-item"><Link className="nav-link" href="/ai-prep">AI Prep</Link></li>
                 <li className="nav-item">
                   <Link className="nav-link" href="/profile">
                     <i className="bi bi-person-circle me-1" />

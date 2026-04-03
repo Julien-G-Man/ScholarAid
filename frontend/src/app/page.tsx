@@ -12,7 +12,7 @@ export default async function HomePage() {
       <section className="hero d-flex flex-column justify-content-center align-items-center">
         <div className="container text-center">
           <h1 className="display-2 fw-bold">ScholarAid</h1>
-          <p className="lead mb-4">Find scholarships. Get AI-powered feedback. Unlock opportunities.</p>
+          <p className="lead mb-4">Find scholarships, stay prepared, and build stronger applications.</p>
           <Link href="/scholarships" className="btn btn-lg btn-light px-5 py-3 rounded-pill shadow-lg">
             🔍 Browse Scholarships
           </Link>
@@ -42,7 +42,7 @@ export default async function HomePage() {
             <div className="col-md-4">
               <div className="feature-box p-4 shadow-sm rounded-4 h-100 bg-white">
                 <h3 className="fw-bold text-primary-brand">🤖 AI Essay Review</h3>
-                <p className="text-muted">Get instant, smart feedback on your essays and eligibility readiness.</p>
+                <p className="text-muted">Use AI guidance to refine essays and approach each application with more confidence.</p>
               </div>
             </div>
             <div className="col-md-4">
@@ -82,7 +82,7 @@ export default async function HomePage() {
       <section className="py-5 text-center cta-section">
         <div className="container">
           <h2 className="fw-bold mb-3 text-white">Not sure if you&apos;re ready?</h2>
-          <p className="lead mb-4 text-white">Let our AI evaluate your essay and eligibility in minutes.</p>
+          <p className="lead mb-4 text-white">Get quick guidance on your essay before you move on to the bigger application steps.</p>
           <Link href="/ai-review/1" className="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-lg">
             💡 Try AI Review
           </Link>

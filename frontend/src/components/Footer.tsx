@@ -27,8 +27,8 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-3" style={{ fontSize: '0.9rem', lineHeight: 1.7 }}>
-              AI-powered scholarship management and application platform. Making scholarship access smarter,
-              faster, and more transparent for students everywhere.
+              A scholarship discovery and application support platform built to help students find opportunities,
+              stay organised, and move through the process with confidence.
             </p>
           </div>
 

@@ -14,10 +14,11 @@ export default function AboutPage() {
           <div className="row justify-content-center">
             <div className="col-lg-8 text-center">
               <p className="lead text-muted">
-                ScholarAid is an AI-powered scholarship platform that connects students with curated global opportunities.
-                Browse and search scholarships by level and field, track deadlines, manage your applications, and get
-                AI-powered feedback on your essays — all in one place. Whether you&apos;re just starting your search or
-                ready to apply, ScholarAid is built to make every step faster, smarter, and more transparent.
+                ScholarAid is a scholarship platform that helps students discover curated global opportunities, stay on top
+                of application requirements, and get extra support when they need it. Browse scholarships by level and field,
+                manage your application journey, and use AI feedback as a practical layer on top of the core experience.
+                Whether you&apos;re just starting your search or getting ready to submit, ScholarAid is built to make each
+                step clearer and easier to navigate.
               </p>
             </div>
           </div>
@@ -43,7 +44,7 @@ export default function AboutPage() {
             <div className="col-md-7">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/img/discussion.jpeg"
+                src="/img/students_collaborating.jpg"
                 className="img-fluid rounded-4 shadow-lg"
                 alt="Students discussing"
                 style={{ maxHeight: '380px', objectFit: 'cover', width: '100%' }}
@@ -99,8 +100,8 @@ export default function AboutPage() {
               <div className="card p-4 h-100 shadow-sm border-0 rounded-4 feature-box">
                 <div className="card-body">
                   <i className="bi bi-robot display-4 text-primary-brand mb-3 d-block" />
-                  <h4 className="fw-bold">AI-Powered Assistance</h4>
-                  <p className="text-muted">Receive smart feedback on your applications and essays.</p>
+                  <h4 className="fw-bold">Application Support</h4>
+                  <p className="text-muted">Use AI guidance and review tools to strengthen essays and prepare with more confidence.</p>
                 </div>
               </div>
             </div>

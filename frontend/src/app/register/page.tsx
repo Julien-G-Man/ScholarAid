@@ -74,13 +74,13 @@ export default function RegisterPage() {
         style={{
           flex: '0 0 40%',
           background:
-            'linear-gradient(160deg, rgba(26,26,46,0.86) 0%, rgba(26,26,46,0.94) 100%), url("/img/discussion.jpeg") center/cover no-repeat',
+            'linear-gradient(160deg, rgba(26,26,46,0.86) 0%, rgba(26,26,46,0.94) 100%), url("/img/students_collaborating.jpg") center/cover no-repeat',
         }}
       >
         <i className="bi bi-person-plus-fill mb-4" style={{ fontSize: '4rem', opacity: 0.9 }} />
         <h2 className="fw-bold fs-1 text-center mb-3">Join ScholarAid</h2>
         <p className="text-center mb-0" style={{ opacity: 0.85, fontSize: '1.1rem', maxWidth: 320 }}>
-          Create a free account to browse scholarships, track deadlines, and get AI-powered application feedback.
+          Create a free account to browse scholarships, stay on top of applications, and get extra feedback when you need it.
         </p>
         <div className="mt-5 pt-2 text-center" style={{ opacity: 0.6, fontSize: '0.85rem' }}>
           Already have an account?{' '}

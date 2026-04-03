@@ -103,7 +103,7 @@ a:hover { color: #8E1B2C; }
 }
 .contact-hero {
   background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-              url('/img/discussion.jpeg') center/cover no-repeat;
+              url('/img/students_collaborating.jpg') center/cover no-repeat;
   min-height: 50vh;
   display: flex;
   align-items: center;
@@ -229,4 +229,25 @@ a:hover { color: #8E1B2C; }
 .tab-nav-link.active {
   color: var(--primary-brand-red);
   border-bottom: 3px solid var(--primary-brand-red);
+}
+
+/* ── AI Prep ── */
+.prose p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.prose strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.prose ul, .prose ol {
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
 }

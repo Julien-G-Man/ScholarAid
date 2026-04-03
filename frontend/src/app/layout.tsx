@@ -4,12 +4,13 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './globals.css';
 import Providers from '@/components/Providers';
 import BootstrapClient from '@/components/BootstrapClient';
+import HealthPing from '@/components/HealthPing';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'ScholarAid',
-  description: 'Find scholarships. Get AI-powered feedback. Unlock opportunities.',
+  description: 'Find scholarships, stay organised, and get extra support for stronger applications.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <BootstrapClient />
+          <HealthPing />
           <Navbar />
           <main>{children}</main>
           <Footer />
