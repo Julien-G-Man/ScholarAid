@@ -4,11 +4,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from api.serializers import RegisterSerializer, UserSerializer
+
+from .serializers import RegisterSerializer, UserSerializer
 
 
 class RegisterView(APIView):
-    """POST /api/v1/auth/register/ — create a new user account."""
+    """POST /api/v1/auth/register/ — create a new user account and return tokens."""
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -28,28 +29,34 @@ class RegisterView(APIView):
 
 
 class LoginView(TokenObtainPairView):
-    """POST /api/v1/auth/login/ — obtain access + refresh tokens."""
+    """POST /api/v1/auth/login/ — obtain access + refresh JWT tokens."""
     permission_classes = [AllowAny]
 
 
 class LogoutView(APIView):
-    """POST /api/v1/auth/logout/ — blacklist the refresh token."""
+    """POST /api/v1/auth/logout/ — blacklist the supplied refresh token."""
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         refresh_token = request.data.get('refresh')
         if not refresh_token:
-            return Response({'error': 'refresh token required.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': 'refresh token is required.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         try:
-            token = RefreshToken(refresh_token)
-            token.blacklist()
+            RefreshToken(refresh_token).blacklist()
             return Response({'message': 'Logged out successfully.'}, status=status.HTTP_200_OK)
         except Exception:
-            return Response({'error': 'Invalid or expired token.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': 'Invalid or already-expired token.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class ProfileView(APIView):
-    """GET/PATCH /api/v1/auth/profile/ — view or update the authenticated user's profile."""
+    """GET /api/v1/auth/profile/ — retrieve the authenticated user's profile.
+       PATCH /api/v1/auth/profile/ — update the authenticated user's profile."""
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

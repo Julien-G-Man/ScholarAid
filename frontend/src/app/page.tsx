@@ -1,22 +1,10 @@
 import Link from 'next/link';
 import ScholarshipCard from '@/components/ScholarshipCard';
 import NewsletterForm from '@/components/NewsletterForm';
-import type { Scholarship } from '@/types';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
-
-async function getFeaturedScholarships(): Promise<Scholarship[]> {
-  try {
-    const res = await fetch(`${API_URL}/scholarships/featured/`, { next: { revalidate: 300 } });
-    if (!res.ok) return [];
-    return res.json();
-  } catch {
-    return [];
-  }
-}
+import { fetchFeaturedScholarships } from '@/lib/serverApi';
 
 export default async function HomePage() {
-  const featured = await getFeaturedScholarships();
+  const featured = await fetchFeaturedScholarships();
 
   return (
     <>
