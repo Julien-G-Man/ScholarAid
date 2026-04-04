@@ -146,8 +146,12 @@ Database  (duplicates skipped: same name + provider)
 ### CLI usage
 
 ```bash
-# Scrape up to 500 non-expired scholarships from MastersPortal
+# Scrape with default limit (500) from MastersPortal
 python manage.py scrape_scholarships
+
+# Scrape a custom number of scholarships
+python manage.py scrape_scholarships --limit 100
+python manage.py scrape_scholarships --limit 1000
 
 # Scrape a different source with a custom limit
 python manage.py scrape_scholarships --source scholarshipportal --limit 200
@@ -158,6 +162,15 @@ python manage.py ingest_scholarships --dry-run
 # Ingest a specific CSV
 python manage.py ingest_scholarships --input backend/data/scholarships_mastersportal_20260404.csv
 ```
+
+### Controlling the scrape limit
+
+You have full control over how many scholarships are scraped per run:
+
+- **Admin UI** (`/admin/scholarships/pipeline`) — edit the **Limit** field before clicking "Start Scrape". Defaults to 500, accepts any value from 10 to 2000.
+- **CLI** — pass `--limit <n>` with any positive integer. No upper cap on the command line.
+
+The limit applies to *valid, non-expired* scholarships collected. The scraper may fetch more pages than the limit suggests because expired or malformed entries are discarded along the way.
 
 ### Available sources
 
