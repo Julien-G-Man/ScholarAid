@@ -47,6 +47,14 @@ export default function Navbar() {
 
             {user ? (
               <>
+                {user.is_staff && (
+                  <li className="nav-item">
+                    <Link className="nav-link" href="/admin/scholarships/intake">
+                      <i className="bi bi-stars me-1" />
+                      AI Intake
+                    </Link>
+                  </li>
+                )}
                 <li className="nav-item">
                   <Link className="nav-link" href="/profile">
                     <i className="bi bi-person-circle me-1" />

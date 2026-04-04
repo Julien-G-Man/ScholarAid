@@ -4,7 +4,7 @@
  */
 
 import axiosInstance from './axiosInstance';
-import type { Scholarship, PaginatedResponse } from '@/types';
+import type { Scholarship, PaginatedResponse, ScholarshipDraft } from '@/types';
 
 const api = {
   // ─── Scholarships ──────────────────────────────────────────────────────────
@@ -36,6 +36,19 @@ const api = {
     message: string;
   }): Promise<{ message: string }> {
     return axiosInstance.post('/contact/', data).then((r) => r.data);
+  },
+
+  // ─── Admin: AI Scholarship Intake ─────────────────────────────────────────
+
+  extractScholarship(payload: {
+    input_type: 'url' | 'text';
+    content: string;
+  }): Promise<ScholarshipDraft> {
+    return axiosInstance.post('/admin/scholarships/extract/', payload).then((r) => r.data);
+  },
+
+  adminCreateScholarship(data: ScholarshipDraft): Promise<Scholarship> {
+    return axiosInstance.post('/admin/scholarships/', data).then((r) => r.data);
   },
 
   // ─── AI Review ─────────────────────────────────────────────────────────────

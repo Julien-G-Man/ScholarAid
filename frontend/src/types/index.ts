@@ -38,9 +38,24 @@ export interface User {
   email: string;
   first_name: string;
   last_name: string;
+  is_staff: boolean;
   profile?: UserProfile;
 }
 
 export interface AuthResponse extends AuthTokens {
   user: User;
+}
+
+/** Fields returned by the AI extraction endpoint (same shape as Scholarship minus id/created_at) */
+export interface ScholarshipDraft {
+  name: string;
+  provider: string;
+  institution: string | null;
+  level: string | null;
+  description: string;
+  eligibility: string | null;
+  essay_prompt: string | null;
+  deadline: string | null;
+  link: string | null;
+  logo_url: string | null;
 }

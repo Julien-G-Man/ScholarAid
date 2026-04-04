@@ -22,6 +22,9 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 # Frontend URL (Next.js)
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
 
+# Anthropic API key (for AI scholarship intake)
+ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY', '')
+
 
 # Application definition
 
