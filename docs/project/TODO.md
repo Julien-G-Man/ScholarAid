@@ -1,25 +1,50 @@
 # ScholarAid Todo
 
-## Next Phase: Post-Dashboard Flow
+## Current Focus
 
-- [ ] Design and implement post-login dashboard user flow.
-- [ ] Define dashboard information architecture (quick actions, recent activity, saved scholarships).
-- [ ] Add role-aware routing/guards for authenticated pages.
+The old post-dashboard and auth/profile milestones are done.
+The remaining work is now mostly production-hardening and final product gaps.
 
-## Authentication Gating
+## Highest Priority
 
-- [ ] Require sign up/sign in before users can access AI review features.
-- [ ] Protect AI review routes and API endpoints for authenticated users only.
-- [ ] Add clear redirect flow to login/register when unauthenticated users attempt AI actions.
+- [ ] Add email notifications.
+- [ ] Wire up real LLM APIs for production use and verify end-to-end AI review/chat responses with actual provider keys.
+- [ ] Fix and harden WebSocket messaging.
 
-## Profile and Account Management
+## Email Notifications
 
-- [ ] Build user profile page (basic info, institution, field of study, country, bio).
-- [ ] Add profile edit/update flow with validation and success/error feedback.
-- [ ] Add account settings section (password change, session/logout controls).
+- [ ] Add outbound email configuration for the backend (`EMAIL_*` settings or provider-based equivalent).
+- [ ] Send an email when a new contact form submission is received.
+- [ ] Send admin/user notification emails for important support messages or broadcasts where appropriate.
+- [ ] Add email notifications for AI review lifecycle events if needed (for example: submitted, reviewed, follow-up ready).
+- [ ] Document all required email environment variables and local/dev behavior.
 
-## Supporting Tasks
+## LLM Integration
 
-- [ ] Add/update tests for auth guards, AI access restrictions, and profile APIs.
-- [ ] Update frontend navigation for authenticated vs guest states.
-- [ ] Document final flow and deployment environment variables after implementation.
+- [ ] Validate the multi-provider AI client against real provider credentials in a non-mock environment.
+- [ ] Decide and document the production provider priority order.
+- [ ] Confirm current model names, request formats, and fallback behavior for supported providers.
+- [ ] Improve failure handling and user-facing messaging when all providers fail.
+- [ ] Add a clear production setup guide for AI provider keys.
+
+## Messaging and WebSockets
+
+- [ ] Fix any remaining connection/reconnect issues in live messaging.
+- [ ] Verify unread badge behavior across login, reconnect, thread open, and refresh flows.
+- [ ] Verify admin inbox updates correctly for new messages, deleted messages, and broadcasts.
+- [ ] Confirm message delivery works for user-to-admin, admin-to-user, and broadcast scenarios.
+- [ ] Review message read-state handling, especially around broadcasts and multi-thread admin workflows.
+- [ ] Add or update backend and frontend tests for the messaging flow.
+
+## Remaining Product Gaps
+
+- [ ] Implement deadline tracking/bookmarking to replace the current "Coming soon" dashboard placeholder.
+- [ ] Review whether saved scholarships/favorites are still needed as a first-class user feature.
+- [ ] Decide whether contact-form submissions should stay admin-only in Django admin or also surface inside the custom admin dashboard.
+
+## Quality and Release Readiness
+
+- [ ] Add integration tests for AI review, admin APIs, and authenticated messaging flows.
+- [ ] Add a final production environment variable checklist across backend and frontend.
+- [ ] Do a full end-to-end pass on the main user journeys: applicant flow, admin flow, AI flow, and support messaging.
+- [ ] Clean up remaining stale docs so all guides match the shipped routes and features.

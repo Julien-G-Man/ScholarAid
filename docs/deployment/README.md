@@ -38,12 +38,12 @@ Create `backend/.env` (see `backend/.env.example` for reference).
 | `SECURE_SSL_REDIRECT` | No | `True` when `DEBUG=False` | Redirect HTTP to HTTPS |
 | `SESSION_COOKIE_SECURE` | No | `True` when `DEBUG=False` | HTTPS-only session cookies |
 | `CSRF_COOKIE_SECURE` | No | `True` when `DEBUG=False` | HTTPS-only CSRF cookies |
-| `SECURE_HSTS_SECONDS` | No | `31536000` | HSTS duration (only applied when `DEBUG=False`) |
+| `SECURE_HSTS_SECONDS` | No | `31536000` | HSTS duration |
 
 ### Database
 
-- **Development**: SQLite (`backend/db.sqlite3`) — zero config, used automatically when `DATABASE_URL` is not set.
-- **Production**: Any PostgreSQL-compatible URL set via `DATABASE_URL`. Requires `dj-database-url` (already in `requirements.txt`). SSL is required by default in production.
+- **Development**: SQLite (`backend/db.sqlite3`) - zero config, used automatically when `DATABASE_URL` is not set.
+- **Production**: Any PostgreSQL-compatible URL set via `DATABASE_URL`.
 
 ### Static files
 
@@ -51,7 +51,7 @@ Static files are served by `whitenoise` in both development and production. Run 
 
 ### CORS
 
-`CORS_ALLOWED_ORIGINS` is set to `[FRONTEND_URL]`. Only the configured frontend origin is allowed cross-origin access. Credentials (cookies) are permitted via `CORS_ALLOW_CREDENTIALS = True`.
+`CORS_ALLOWED_ORIGINS` is set to `[FRONTEND_URL]`. Only the configured frontend origin is allowed cross-origin access. Credentials are permitted via `CORS_ALLOW_CREDENTIALS = True`.
 
 ### Production security checklist
 
@@ -83,22 +83,28 @@ Create `frontend/.env.local`:
 
 | Variable | Required | Default | Notes |
 |---|---|---|---|
-| `NEXT_PUBLIC_API_URL` | No | `http://localhost:8000/api/v1` | Backend API base URL — used by both `axiosInstance` and `serverApi` |
+| `NEXT_PUBLIC_API_URL` | No | `http://localhost:8000/api/v1` | Backend API base URL - used by Axios and server fetch helpers |
 
 ### Changing the API base URL
 
 `NEXT_PUBLIC_API_URL` is read by both:
-- `frontend/src/services/axiosInstance.ts` — client-side requests
-- `frontend/src/lib/serverApi.ts` — server-side fetch calls
+- `frontend/src/services/axiosInstance.ts` - client-side requests
+- `frontend/src/lib/serverApi.ts` - server-side fetch calls
 
-Update this single variable and both layers will pick up the change.
+`frontend/src/context/MessagingContext.tsx` also derives the WebSocket origin from `NEXT_PUBLIC_API_URL`, so realtime messaging follows the same backend host automatically.
 
 ### API versioning
 
-The API version is encoded in the Django root URL config (`config/urls.py` includes `api/` under the `/api/v1/` prefix). If the version is bumped, update both the Django include and `NEXT_PUBLIC_API_URL` together.
+If the version is bumped, update both the Django route prefix and `NEXT_PUBLIC_API_URL` together.
 
 ---
 
 ## Health check
 
 `GET /api/v1/health/` returns `{ "status": "healthy", "service": "ScholarAid API v1" }` with no authentication required. Use this endpoint for uptime monitoring and deployment readiness checks.
+
+## Schema and docs
+
+- `GET /api/schema/` exposes the DRF OpenAPI schema
+- `GET /api/docs/` redirects to the schema view
+- `/` on the backend root also redirects to the schema
