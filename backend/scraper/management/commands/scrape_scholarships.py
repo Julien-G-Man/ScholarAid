@@ -5,10 +5,11 @@ Usage:
   python manage.py scrape_scholarships
   python manage.py scrape_scholarships --source mastersportal --limit 500
   python manage.py scrape_scholarships --source scholarshipportal --limit 200 --output /tmp/out.csv
+  python manage.py scrape_scholarships --source opportunitiesforafricans --limit 200
 
 Options:
   --source   Site to scrape (default: mastersportal)
-             Choices: mastersportal, scholarshipportal
+             Choices: mastersportal, scholarshipportal, opportunitiesforafricans
   --limit    Max non-expired scholarships to collect (default: 500)
   --output   Path for the output CSV (default: backend/data/scholarships_<source>_<date>.csv)
 """
@@ -65,9 +66,15 @@ class Command(BaseCommand):
             )
         )
 
+        def collect_progress(done, total):
+            self.stdout.write(
+                f'  [Collect] Found {done}/{total} pages...', ending='\r'
+            )
+            self.stdout.flush()
+
         def progress(done, total):
             self.stdout.write(
-                f'  [Claude] Processed {done}/{total} pages…', ending='\r'
+                f'  [Extract] Processed {done}/{total} pages...', ending='\r'
             )
             self.stdout.flush()
 
@@ -77,6 +84,7 @@ class Command(BaseCommand):
                 limit=limit,
                 output_path=csv_path,
                 progress_cb=progress,
+                collect_cb=collect_progress,
             )
             self.stdout.write('')   # newline after \r progress
             self.stdout.write(

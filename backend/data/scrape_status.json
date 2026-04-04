@@ -1,0 +1,21 @@
+{
+  "scrape": {
+    "state": "done",
+    "started_at": "2026-04-04T13:46:09.772354+00:00",
+    "finished_at": "2026-04-04T13:48:37.029488+00:00",
+    "source": "opportunitiesforafricans",
+    "collected": 50,
+    "saved": 50,
+    "csv_file": "scholarships_opportunitiesforafricans_20260404_144609.csv",
+    "error": null
+  },
+  "ingest": {
+    "state": "done",
+    "started_at": "2026-04-04T13:52:34.598823+00:00",
+    "finished_at": "2026-04-04T13:52:35.770914+00:00",
+    "csv_file": "scholarships_opportunitiesforafricans_20260404_144609.csv",
+    "inserted": 50,
+    "skipped": 0,
+    "error": null
+  }
+}

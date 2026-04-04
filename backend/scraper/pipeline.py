@@ -16,11 +16,16 @@ and validation. This means the scraper never contains fragile per-site selectors
 import json
 import logging
 import re
+from html import unescape
 from datetime import date
 from html.parser import HTMLParser
+from urllib.parse import urlsplit
 
-import anthropic
 from django.conf import settings
+try:
+    import anthropic
+except Exception:  # pragma: no cover - optional dependency/runtime
+    anthropic = None
 
 logger = logging.getLogger(__name__)
 
@@ -142,11 +147,11 @@ You are a scholarship data extraction specialist.
 Below are {n} scholarship detail pages (plain text, numbered 1–{n}).
 For EACH page return a JSON object with these exact keys (null if not found):
 
-  name        – full scholarship name (string, required)
-  provider    – organisation offering it, e.g. "DAAD" (string, required)
+  name        – full scholarship name (string or null)
+  provider    – organisation offering it, e.g. "DAAD" (string or null)
   institution – target university/institution or null
   level       – academic level: "Undergraduate", "Postgraduate", "PhD", "All", or null
-  description – concise 2–4 sentence summary (string, required)
+  description – concise 2–4 sentence summary (string or null)
   eligibility – eligibility criteria as a readable paragraph or null
   essay_prompt– essay / personal-statement prompt if mentioned, else null
   deadline    – application deadline in YYYY-MM-DD format or null
@@ -156,6 +161,7 @@ For EACH page return a JSON object with these exact keys (null if not found):
   expired     – true if deadline has already passed today ({today}), else false
 
 Return a JSON ARRAY of {n} objects in the same order as the input.
+If a field is unclear, return null instead of guessing.
 No markdown, no prose — just the raw JSON array.
 
 ---
@@ -165,6 +171,54 @@ _ITEM_TEMPLATE = 'PAGE {i} (URL: {url})\n{text}\n'
 _JSON_ARRAY_RE = re.compile(r'\[[\s\S]*\]')
 
 
+def _fallback_extract_record(page: dict) -> dict:
+    """
+    Best-effort extraction that does not require Anthropic.
+    Keeps data flowing by using URL/title/plain-text heuristics.
+    """
+    url = (page.get('url') or '').strip()
+    html = page.get('html') or ''
+
+    title = ''
+    m = re.search(r'<title[^>]*>(.*?)</title>', html, flags=re.IGNORECASE | re.DOTALL)
+    if m:
+        title = re.sub(r'\s+', ' ', m.group(1)).strip()
+
+    parsed = urlsplit(url)
+    provider = parsed.netloc.lower().replace('www.', '') if parsed.netloc else ''
+    text = _html_to_text(html)
+    desc = unescape(re.sub(r'\s+', ' ', text).strip())
+    if len(desc) > 600:
+        desc = desc[:600].rsplit(' ', 1)[0].strip() + '...'
+
+    name = unescape(title or url.rstrip('/').split('/')[-1].replace('-', ' ').strip())
+    name = re.sub(
+        r'\s*[-|]\s*opportunities\s+for\s+africans\s*$',
+        '',
+        name,
+        flags=re.IGNORECASE,
+    ).strip()
+
+    return {
+        'name': name,
+        'provider': provider,
+        'institution': '',
+        'level': '',
+        'description': desc,
+        'eligibility': '',
+        'essay_prompt': '',
+        'deadline': '',
+        'link': url,
+        'logo_url': '',
+        'source_url': url,
+    }
+
+
+def _fallback_extract_batch(pages: list[dict], reason: str) -> list[dict]:
+    logger.warning('Claude extraction unavailable, using fallback extraction: %s', reason)
+    return [_fallback_extract_record(page) for page in pages if isinstance(page, dict)]
+
+
 def extract_scholarships_from_batch(
     pages: list[dict],   # [{'url': str, 'html': str}, ...]
 ) -> list[dict]:
@@ -172,13 +226,19 @@ def extract_scholarships_from_batch(
     Send a batch of detail pages to Claude and return cleaned scholarship dicts.
 
     Each returned dict has keys matching core.models.Scholarships fields plus
-    'source_url'. Items marked expired=true or missing required fields are
-    filtered out before returning.
+    'source_url'. Filtering is intentionally lenient so partially extracted
+    records are still available in CSV for human review.
     """
     if not pages:
         return []
 
-    client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    api_key = (getattr(settings, 'ANTHROPIC_API_KEY', '') or '').strip()
+    if anthropic is None:
+        return _fallback_extract_batch(pages, 'anthropic package not installed')
+    if not api_key:
+        return _fallback_extract_batch(pages, 'ANTHROPIC_API_KEY is missing')
+
+    client = anthropic.Anthropic(api_key=api_key)
     today_str = date.today().isoformat()
     n = len(pages)
 
@@ -194,9 +254,8 @@ def extract_scholarships_from_batch(
             thinking={'type': 'adaptive'},
             messages=[{'role': 'user', 'content': prompt}],
         )
-    except anthropic.APIError as exc:
-        logger.error('Claude API error in batch extraction: %s', exc)
-        return []
+    except Exception as exc:
+        return _fallback_extract_batch(pages, f'Claude API error: {exc}')
 
     # Find text block (thinking blocks may precede it)
     raw = ''
@@ -207,27 +266,46 @@ def extract_scholarships_from_batch(
 
     match = _JSON_ARRAY_RE.search(raw)
     if not match:
-        logger.error('Claude did not return a JSON array. Raw: %s', raw[:500])
-        return []
+        return _fallback_extract_batch(pages, 'Claude response was not valid JSON array')
 
     try:
         items: list[dict] = json.loads(match.group())
     except json.JSONDecodeError as exc:
-        logger.error('JSON parse error: %s\nRaw: %s', exc, raw[:500])
-        return []
+        return _fallback_extract_batch(pages, f'JSON parse error: {exc}')
 
-    # Filter and validate
+    # Filter and validate (lenient mode: keep partial rows for review)
     results: list[dict] = []
-    for item in items:
+    for idx, item in enumerate(items):
         if not isinstance(item, dict):
             continue
-        if item.get('expired'):
-            logger.debug('Filtered expired scholarship: %s', item.get('name'))
+
+        name = (item.get('name') or '').strip()
+        provider = (item.get('provider') or '').strip()
+        description = (item.get('description') or '').strip()
+        source_url = (item.get('source_url') or '').strip()
+        link = (item.get('link') or '').strip()
+
+        # Drop only totally unusable rows (no useful identifying content).
+        if not name and not description and not source_url and not link:
+            logger.debug('Filtered empty record from model output')
             continue
-        if not item.get('name') or not item.get('provider') or not item.get('description'):
-            logger.debug('Filtered incomplete record: %s', item.get('name'))
-            continue
-        results.append(item)
+
+        page_url = pages[idx].get('url', '') if idx < len(pages) else ''
+
+        cleaned = {
+            'name': name,
+            'provider': provider,
+            'institution': (item.get('institution') or '').strip(),
+            'level': (item.get('level') or '').strip(),
+            'description': description,
+            'eligibility': (item.get('eligibility') or '').strip(),
+            'essay_prompt': (item.get('essay_prompt') or '').strip(),
+            'deadline': (item.get('deadline') or '').strip(),
+            'link': link,
+            'logo_url': (item.get('logo_url') or '').strip(),
+            'source_url': source_url or page_url,
+        }
+        results.append(cleaned)
 
     return results
 
@@ -253,3 +331,4 @@ def process_pages_in_batches(
             progress_cb(min(start + batch_size, total), total)
 
     return results
+

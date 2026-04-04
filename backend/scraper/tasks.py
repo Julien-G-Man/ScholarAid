@@ -34,6 +34,7 @@ def run_scrape(
     limit: int,
     output_path: Path,
     progress_cb=None,
+    collect_cb=None,
 ) -> Path:
     """
     1. Instantiate the scraper for `source`.
@@ -55,7 +56,12 @@ def run_scrape(
     st.scrape_started(source)
 
     # Step 1 — Collect raw HTML pages
-    pages = scraper.get_raw_detail_pages(limit)
+    def _collect_progress(done, total, _last_url=None):
+        st.scrape_progress(collected=done, saved=0)
+        if collect_cb:
+            collect_cb(done, total)
+
+    pages = scraper.get_raw_detail_pages(limit, progress_cb=_collect_progress)
     logger.info('[scrape] Collected %d raw pages', len(pages))
     st.scrape_progress(collected=len(pages), saved=0)
 

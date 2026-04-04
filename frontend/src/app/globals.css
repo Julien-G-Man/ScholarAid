@@ -30,7 +30,8 @@ a:hover { color: #8E1B2C; }
   color: white !important;
 }
 .navbar-brand img {
-  height: 50px;
+  width: auto;
+  height: auto;
   max-height: 300px;
   object-fit: contain;
   margin-left: 10px;

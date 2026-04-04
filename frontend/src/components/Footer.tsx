@@ -29,7 +29,7 @@ export default function Footer() {
                 alt="ScholarAid"
                 width={150}
                 height={45}
-                style={{ height: '45px', width: 'auto', objectFit: 'contain', marginBottom: '1rem' }}
+                style={{ objectFit: 'contain', display: 'block', marginBottom: '1rem' }}
               />
             </Link>
             <p className="mt-3" style={{ fontSize: '0.9rem', lineHeight: 1.7 }}>

@@ -170,6 +170,31 @@ export default function AdminPage() {
       <section className="py-5">
         <div className="container">
 
+          {/* Admin tools */}
+          <h4 className="fw-bold text-primary-brand mb-3">Admin tools</h4>
+          <div className="card border-0 rounded-4 shadow-sm p-4 mb-5">
+            <div className="row g-3">
+              <div className="col-12 col-md-6">
+                <Link
+                  href="/admin/scholarships/intake"
+                  className="btn btn-outline-primary-brand rounded-pill w-100 py-2"
+                >
+                  <i className="bi bi-stars me-2" />
+                  AI Intake (single)
+                </Link>
+              </div>
+              <div className="col-12 col-md-6">
+                <Link
+                  href="/admin/scholarships/pipeline"
+                  className="btn btn-outline-primary-brand rounded-pill w-100 py-2"
+                >
+                  <i className="bi bi-diagram-3 me-2" />
+                  Scraper Pipeline
+                </Link>
+              </div>
+            </div>
+          </div>
+
           {/* ── Platform stats ─────────────────────────────────────────────── */}
           <h4 className="fw-bold text-primary-brand mb-3">Platform</h4>
 

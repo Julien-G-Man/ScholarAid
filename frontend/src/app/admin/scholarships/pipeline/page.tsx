@@ -40,6 +40,7 @@ interface PipelineStatus {
 const SOURCES = [
   { value: 'mastersportal', label: 'MastersPortal.eu' },
   { value: 'scholarshipportal', label: 'ScholarshipPortal.com' },
+  { value: 'opportunitiesforafricans', label: 'Opportunities For Africans' },
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

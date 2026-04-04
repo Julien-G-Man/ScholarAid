@@ -71,7 +71,7 @@ export default function Navbar() {
             alt="ScholarAid Logo"
             width={160}
             height={50}
-            style={{ height: '50px', width: 'auto', objectFit: 'contain' }}
+            style={{ objectFit: 'contain', display: 'block' }}
             priority
           />
         </Link>
@@ -96,39 +96,14 @@ export default function Navbar() {
             {user ? (
               <>
                 <li className="nav-item"><Link className="nav-link" href="/ai-prep" onClick={closeNavbar}>AI Prep</Link></li>
-                {(user.is_staff || user.is_superuser) && (
-                  <li className="nav-item dropdown">
-                    <button
-                      className="nav-link dropdown-toggle border-0 bg-transparent"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      type="button"
-                    >
-                      <i className="bi bi-shield-lock me-1" />
-                      Tools
-                    </button>
-                    <ul className="dropdown-menu dropdown-menu-end">
-                      <li>
-                        <Link className="dropdown-item" href="/admin/scholarships/intake" onClick={closeNavbar}>
-                          <i className="bi bi-stars me-2" />
-                          AI Intake (single)
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item" href="/admin/scholarships/pipeline" onClick={closeNavbar}>
-                          <i className="bi bi-diagram-3 me-2" />
-                          Scraper Pipeline
-                        </Link>
-                      </li>
-                    </ul>
+                {!(user.is_staff || user.is_superuser) && (
+                  <li className="nav-item">
+                    <Link className="nav-link" href="/profile" onClick={closeNavbar}>
+                      <i className="bi bi-person-circle me-1" />
+                      {user.first_name || user.username}
+                    </Link>
                   </li>
                 )}
-                <li className="nav-item">
-                  <Link className="nav-link" href="/profile" onClick={closeNavbar}>
-                    <i className="bi bi-person-circle me-1" />
-                    {user.first_name || user.username}
-                  </Link>
-                </li>
                 {(user.is_staff || user.is_superuser) && (
                   <li className="nav-item ms-lg-2">
                     <Link className="btn btn-sm rounded-pill px-3 fw-semibold position-relative" href="/admin" onClick={closeNavbar}

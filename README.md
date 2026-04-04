@@ -171,6 +171,7 @@ python manage.py scrape_scholarships --limit 1000
 
 # Scrape a different source with a custom limit
 python manage.py scrape_scholarships --source scholarshipportal --limit 200
+python manage.py scrape_scholarships --source opportunitiesforafricans --limit 200
 
 # Preview ingest without writing to DB
 python manage.py ingest_scholarships --dry-run
@@ -194,6 +195,7 @@ The limit applies to *valid, non-expired* scholarships collected. The scraper ma
 |---|---|
 | `mastersportal` | MastersPortal.eu |
 | `scholarshipportal` | ScholarshipPortal.com |
+| `opportunitiesforafricans` | Opportunities For Africans (Undergraduate category) |
 
 ---
 
