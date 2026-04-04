@@ -5,7 +5,6 @@ from .api_views import (
     AIReviewSessionDetailView,
     AIReviewSubmitView,
     AIChatView,
-    AIReviewViewOld,
 )
 
 urlpatterns = [
@@ -19,7 +18,4 @@ urlpatterns = [
 
     # Q&A chat
     path('ai-review/<int:session_id>/chat/', AIChatView.as_view(), name='api-ai-chat'),
-
-    # Legacy (deprecated)
-    path('ai-review/<int:scholarship_id>/', AIReviewViewOld.as_view(), name='api-ai-review-old'),
 ]

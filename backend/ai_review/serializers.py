@@ -43,8 +43,22 @@ class AIReviewSessionSerializer(serializers.ModelSerializer):
 
 class EssaySubmitSerializer(serializers.Serializer):
     """Handle essay submission for review (text or file)."""
-    essay_text = serializers.CharField(required=False, allow_blank=True)
+    ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'txt'}
+    MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
+    MAX_TEXT_LENGTH = 50_000          # ~10 pages of text
+
+    essay_text = serializers.CharField(required=False, allow_blank=True, max_length=MAX_TEXT_LENGTH)
     essay_file = serializers.FileField(required=False)
+
+    def validate_essay_file(self, file):
+        ext = file.name.rsplit('.', 1)[-1].lower() if '.' in file.name else ''
+        if ext not in self.ALLOWED_EXTENSIONS:
+            raise serializers.ValidationError(
+                f'Unsupported file type ".{ext}". Allowed: {", ".join(self.ALLOWED_EXTENSIONS)}.'
+            )
+        if file.size > self.MAX_FILE_SIZE:
+            raise serializers.ValidationError('File too large. Maximum size is 5 MB.')
+        return file
 
     def validate(self, attrs):
         if not attrs.get('essay_text') and not attrs.get('essay_file'):

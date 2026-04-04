@@ -15,7 +15,7 @@ class ApplicationGuide(models.Model):
 
     scholarship = models.ForeignKey(Scholarships, on_delete=models.CASCADE, related_name='ai_guides')
     category = models.CharField(max_length=50, choices=CATEGORIES)
-    content = models.TextField()  # Markdown content with guidance
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -38,13 +38,16 @@ class AIReviewSession(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ai_sessions')
     scholarship = models.ForeignKey(Scholarships, on_delete=models.CASCADE, related_name='ai_sessions')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
-    notes = models.TextField(blank=True)  # User's personal notes
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress', db_index=True)
+    notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True, db_index=True)
 
     class Meta:
         ordering = ['-updated_at']
+        indexes = [
+            models.Index(fields=['user', 'status'], name='ai_session_user_status_idx'),
+        ]
 
     def __str__(self):
         return f"{self.user.username} — {self.scholarship.name}"
@@ -52,32 +55,22 @@ class AIReviewSession(models.Model):
 
 class EssayFeedback(models.Model):
     """Stores detailed feedback on a submitted essay."""
-    FEEDBACK_TYPES = [
-        ('structure', 'Structure'),
-        ('clarity', 'Clarity'),
-        ('relevance', 'Relevance to Scholarship'),
-        ('persuasiveness', 'Persuasiveness'),
-        ('grammar', 'Grammar & Style'),
-    ]
-
     session = models.OneToOneField(AIReviewSession, on_delete=models.CASCADE, related_name='feedback')
-    essay_text = models.TextField()  # Store the submitted essay
-    essay_file_name = models.CharField(max_length=255, blank=True)  # Original filename if uploaded
+    essay_text = models.TextField()
+    essay_file_name = models.CharField(max_length=255, blank=True)
 
-    # Structured feedback
-    overall_score = models.IntegerField(default=0)  # 0-100
+    overall_score = models.IntegerField(default=0)
     structure_feedback = models.TextField(blank=True)
     clarity_feedback = models.TextField(blank=True)
     relevance_feedback = models.TextField(blank=True)
     persuasiveness_feedback = models.TextField(blank=True)
     grammar_feedback = models.TextField(blank=True)
 
-    # Suggestions
-    strengths = models.TextField(blank=True)  # JSON list of strengths
-    improvements = models.TextField(blank=True)  # JSON list of suggestions
-    next_steps = models.TextField(blank=True)  # Guidance for next revision
+    strengths = models.TextField(blank=True)
+    improvements = models.TextField(blank=True)
+    next_steps = models.TextField(blank=True)
 
-    reviewed_at = models.DateTimeField(auto_now_add=True)
+    reviewed_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ['-reviewed_at']
@@ -89,9 +82,9 @@ class EssayFeedback(models.Model):
 class ChatMessage(models.Model):
     """Tracks Q&A chat between user and AI guide."""
     session = models.ForeignKey(AIReviewSession, on_delete=models.CASCADE, related_name='chat_messages')
-    role = models.CharField(max_length=10, choices=[('user', 'User'), ('ai', 'AI')])
+    role = models.CharField(max_length=10, choices=[('user', 'User'), ('ai', 'AI')], db_index=True)
     content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ['created_at']

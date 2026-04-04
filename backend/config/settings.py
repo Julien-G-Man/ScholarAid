@@ -41,6 +41,9 @@ FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
 # Application definition
 
 INSTALLED_APPS = [
+    # daphne must be first — before django.contrib.staticfiles
+    'daphne',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,11 +56,13 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'channels', 
 
     # Custom Apps
     'core',
     'users',
     'ai_review',
+    'messaging',
 ]
 
 MIDDLEWARE = [
@@ -91,11 +96,28 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
+
+# ─── Channel Layers ───────────────────────────────────────────────────────────
+# Use Redis in production (set REDIS_URL env var) or in-memory for dev.
+# Note: InMemoryChannelLayer is single-process only — fine for dev/single-server.
+_REDIS_URL = os.getenv('REDIS_URL', '').strip()
+if _REDIS_URL:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {'hosts': [_REDIS_URL]},
+        }
+    }
+else:
+    CHANNEL_LAYERS = {
+        'default': {'BACKEND': 'channels.layers.InMemoryChannelLayer'}
+    }
 
 
 # Database
 # - Local development defaults to SQLite
-# - Production can provide DATABASE_URL for PostgreSQL
+# - Production uses PostgreSQL
 DATABASE_URL = os.getenv('DATABASE_URL')
 DB_CONN_MAX_AGE = int(os.getenv('DB_CONN_MAX_AGE', '600'))
 DB_SSL_REQUIRE = os.getenv('DB_SSL_REQUIRE', 'False' if DEBUG else 'True') == 'True'
