@@ -22,8 +22,8 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      await login(fields.username, fields.password);
-      router.push('/dashboard');
+      const loggedInUser = await login(fields.username, fields.password);
+      router.push(loggedInUser.is_staff || loggedInUser.is_superuser ? '/admin' : '/dashboard');
     } catch {
       setError('Invalid username or password.');
     } finally {

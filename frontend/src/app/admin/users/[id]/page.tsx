@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useMessaging } from '@/context/MessagingContext';
 import api from '@/services/api';
-import type { AdminUserDetail } from '@/types';
+import type { AdminUserDetail, Message } from '@/types';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
@@ -59,9 +60,17 @@ export default function AdminUserDetailPage() {
   const params = useParams();
   const userId = Number(params.id);
 
+  const { send, lastMessage, markRead } = useMessaging();
+
   const [detail, setDetail] = useState<AdminUserDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [openSession, setOpenSession] = useState<number | null>(null);
+
+  // ── chat state ────────────────────────────────────────────────────────────
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+  const [chatInput, setChatInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
+  const chatBottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (initialising) return;
@@ -77,8 +86,44 @@ export default function AdminUserDetailPage() {
       .finally(() => setLoading(false));
   }, [user, userId, router]);
 
+  // Load conversation history and mark as read
+  useEffect(() => {
+    if (!user?.is_staff && !user?.is_superuser) return;
+    setChatLoading(true);
+    api.getAdminConversation(userId)
+      .then((msgs) => { setChatMessages(msgs); markRead(userId); })
+      .catch(() => {})
+      .finally(() => setChatLoading(false));
+  }, [user, userId, markRead]);
+
+  // Append real-time messages for this user
+  useEffect(() => {
+    if (!lastMessage) return;
+    const isForThisUser =
+      lastMessage.from_user_id === userId ||
+      (!lastMessage.is_mine && lastMessage.sender_id === userId);
+    const isMyEcho = lastMessage.is_mine;
+    if (!isForThisUser && !isMyEcho) return;
+    setChatMessages((prev) => {
+      if (prev.some((m) => m.id === lastMessage.id)) return prev;
+      return [...prev, lastMessage];
+    });
+  }, [lastMessage, userId]);
+
+  // Auto-scroll chat
+  useEffect(() => {
+    chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
   if (initialising || !user) return null;
   if (!user.is_staff && !user.is_superuser) return null;
+
+  function handleChatSend() {
+    const content = chatInput.trim();
+    if (!content) return;
+    send(content, userId);
+    setChatInput('');
+  }
 
   const u = detail?.user;
   const sessions = detail?.sessions ?? [];
@@ -346,6 +391,72 @@ export default function AdminUserDetailPage() {
                   })}
                 </div>
               )}
+            {/* ── Direct message panel ────────────────────────────────────── */}
+            <hr className="my-5" />
+            <h4 className="fw-bold text-primary-brand mb-3">
+              <i className="bi bi-chat-dots me-2" />
+              Message {u?.first_name || u?.username}
+            </h4>
+
+            <div className="card border-0 rounded-4 shadow-sm overflow-hidden" style={{ maxWidth: 640 }}>
+              <div
+                className="p-3 d-flex flex-column gap-2"
+                style={{ height: 320, overflowY: 'auto', background: '#f8f9fa' }}
+              >
+                {chatLoading ? (
+                  <div className="text-center text-muted small pt-4">Loading…</div>
+                ) : chatMessages.length === 0 ? (
+                  <div className="text-center text-muted small pt-4">
+                    <i className="bi bi-chat-dots d-block fs-3 mb-2 opacity-50" />
+                    No messages yet. Start the conversation.
+                  </div>
+                ) : (
+                  chatMessages.map((m) => (
+                    <div key={m.id} className={`d-flex ${m.is_mine ? 'justify-content-end' : 'justify-content-start'}`}>
+                      <div
+                        className="rounded-3 px-3 py-2"
+                        style={{
+                          maxWidth: '75%',
+                          background: m.is_mine ? '#A31F34' : '#fff',
+                          color: m.is_mine ? '#fff' : '#212529',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+                          fontSize: '0.875rem',
+                        }}
+                      >
+                        {!m.is_mine && (
+                          <div className="fw-semibold mb-1" style={{ fontSize: '0.7rem', opacity: 0.7 }}>
+                            {u?.first_name || u?.username}
+                          </div>
+                        )}
+                        <div>{m.content}</div>
+                        <div className="mt-1 text-end" style={{ fontSize: '0.62rem', opacity: 0.65 }}>
+                          {new Date(m.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+                <div ref={chatBottomRef} />
+              </div>
+              <div className="p-2 border-top d-flex gap-2">
+                <input
+                  type="text"
+                  className="form-control form-control-sm rounded-pill"
+                  placeholder={`Message ${u?.first_name || u?.username}…`}
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleChatSend()}
+                />
+                <button
+                  className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                  style={{ width: 34, height: 34, background: '#A31F34', color: '#fff' }}
+                  onClick={handleChatSend}
+                  disabled={!chatInput.trim()}
+                >
+                  <i className="bi bi-send-fill" style={{ fontSize: '0.75rem' }} />
+                </button>
+              </div>
+            </div>
             </>
           )}
         </div>

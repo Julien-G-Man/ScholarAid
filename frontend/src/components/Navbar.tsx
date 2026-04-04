@@ -4,9 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useMessaging } from '@/context/MessagingContext';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { unread } = useMessaging();
   const router = useRouter();
 
   async function handleLogout() {
@@ -56,10 +58,16 @@ export default function Navbar() {
                 </li>
                 {(user.is_staff || user.is_superuser) && (
                   <li className="nav-item ms-lg-2">
-                    <Link className="btn btn-sm rounded-pill px-3 fw-semibold" href="/admin"
+                    <Link className="btn btn-sm rounded-pill px-3 fw-semibold position-relative" href="/admin"
                       style={{ background: '#A31F34', color: '#fff' }}>
                       <i className="bi bi-shield-lock me-1" />
                       Admin
+                      {unread > 0 && (
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"
+                          style={{ fontSize: '0.6rem' }}>
+                          {unread > 9 ? '9+' : unread}
+                        </span>
+                      )}
                     </Link>
                   </li>
                 )}

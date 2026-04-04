@@ -4,7 +4,7 @@
  */
 
 import axiosInstance from './axiosInstance';
-import type { Scholarship, PaginatedResponse, AdminStats, AdminUser, AdminUserDetail } from '@/types';
+import type { Scholarship, PaginatedResponse, AdminStats, AdminUser, AdminUserDetail, Message, AdminConversation } from '@/types';
 
 const api = {
   // ─── Scholarships ──────────────────────────────────────────────────────────
@@ -144,6 +144,28 @@ const api = {
 
   getAdminUserDetail(userId: number): Promise<AdminUserDetail> {
     return axiosInstance.get(`/admin/users/${userId}/`).then((r) => r.data);
+  },
+
+  // ─── Messaging ─────────────────────────────────────────────────────────────
+
+  getMyMessages(): Promise<Message[]> {
+    return axiosInstance.get('/messages/').then((r) => r.data);
+  },
+
+  getMyUnreadCount(): Promise<{ unread: number }> {
+    return axiosInstance.get('/messages/unread-count/').then((r) => r.data);
+  },
+
+  getAdminInbox(): Promise<AdminConversation[]> {
+    return axiosInstance.get('/admin/messages/').then((r) => r.data);
+  },
+
+  getAdminUnreadCount(): Promise<{ unread: number }> {
+    return axiosInstance.get('/admin/messages/unread-count/').then((r) => r.data);
+  },
+
+  getAdminConversation(userId: number): Promise<Message[]> {
+    return axiosInstance.get(`/admin/messages/${userId}/`).then((r) => r.data);
   },
 };
 

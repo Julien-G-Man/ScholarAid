@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 const HIDDEN_FOOTER_PATHS = ['/login', '/register'];
-const HIDDEN_FOOTER_PREFIXES = ['/dashboard', '/profile', '/ai-prep'];
+const HIDDEN_FOOTER_PREFIXES = ['/dashboard', '/profile', '/ai-prep', '/admin'];
 
 export default function Footer() {
   const pathname = usePathname();

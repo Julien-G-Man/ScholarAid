@@ -82,6 +82,31 @@ export interface AdminUser {
   last_active: string | null;
 }
 
+// ─── Messaging ─────────────────────────────────────────────────────────────
+
+export interface Message {
+  id: number;
+  content: string;
+  sender_id: number;
+  sender_name: string;      // 'Support' when coming from admin
+  is_mine: boolean;
+  is_broadcast: boolean;
+  is_read: boolean;
+  from_user_id?: number | null;   // populated on admin socket for user→admin msgs
+  from_username?: string | null;
+  from_name?: string | null;
+  created_at: string;
+}
+
+export interface AdminConversation {
+  user_id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  unread: number;
+  last_message: { content: string; created_at: string; is_mine: boolean } | null;
+}
+
 export interface AdminUserDetail {
   user: {
     id: number;

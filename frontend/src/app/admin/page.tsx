@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useMessaging } from '@/context/MessagingContext';
 import api from '@/services/api';
-import type { AdminStats, AdminUser } from '@/types';
+import type { AdminStats, AdminUser, AdminConversation } from '@/types';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
@@ -56,10 +57,15 @@ export default function AdminPage() {
   const { user, initialising } = useAuth();
   const router = useRouter();
 
+  const { broadcast, lastMessage } = useMessaging();
+
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [inbox, setInbox] = useState<AdminConversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [broadcastInput, setBroadcastInput] = useState('');
+  const [broadcastSent, setBroadcastSent] = useState(false);
 
   useEffect(() => {
     if (initialising) return;
@@ -69,14 +75,61 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!user?.is_staff && !user?.is_superuser) return;
-    Promise.all([api.getAdminStats(), api.getAdminUsers()])
-      .then(([s, u]) => { setStats(s); setUsers(u); })
+    Promise.all([api.getAdminStats(), api.getAdminUsers(), api.getAdminInbox()])
+      .then(([s, u, i]) => { setStats(s); setUsers(u); setInbox(i); })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [user]);
 
+  // Update inbox in real-time when a user message arrives via WebSocket
+  useEffect(() => {
+    if (!lastMessage || lastMessage.is_mine || lastMessage.is_broadcast) return;
+    const fromId = lastMessage.from_user_id;
+    if (!fromId) return;
+
+    const newLastMsg = {
+      content: lastMessage.content,
+      created_at: lastMessage.created_at,
+      is_mine: false,
+    };
+
+    setInbox((prev) => {
+      const exists = prev.find((c) => c.user_id === fromId);
+      if (exists) {
+        const updated = prev.map((c) =>
+          c.user_id === fromId
+            ? { ...c, unread: c.unread + 1, last_message: newLastMsg }
+            : c
+        );
+        // re-sort: most recent first
+        return [...updated].sort((a, b) =>
+          (b.last_message?.created_at ?? '') > (a.last_message?.created_at ?? '') ? 1 : -1
+        );
+      }
+      // New conversation — prepend
+      return [{
+        user_id: fromId,
+        username: lastMessage.from_username ?? '',
+        first_name: lastMessage.from_name?.split(' ')[0] ?? '',
+        last_name: lastMessage.from_name?.split(' ').slice(1).join(' ') ?? '',
+        unread: 1,
+        last_message: newLastMsg,
+      }, ...prev];
+    });
+  }, [lastMessage]);
+
   if (initialising || !user) return null;
   if (!user.is_staff && !user.is_superuser) return null;
+
+  // ── broadcast send ────────────────────────────────────────────────────────
+  function handleBroadcast() {
+    const content = broadcastInput.trim();
+    if (!content) return;
+    broadcast(content);
+    setBroadcastInput('');
+    setBroadcastSent(true);
+    setTimeout(() => setBroadcastSent(false), 3000);
+  }
 
   // ── filtered users ────────────────────────────────────────────────────────
   const filtered = users.filter((u) => {
@@ -165,6 +218,99 @@ export default function AdminPage() {
               <StatCard icon="bi-archive"         label="Archived"          value={stats.ai.archived} />
             </div>
           ) : null}
+
+          {/* ── Broadcast ────────────────────────────────────────────────────*/}
+          <h4 className="fw-bold text-primary-brand mb-3">Broadcast message</h4>
+          <div className="card border-0 rounded-4 shadow-sm p-4 mb-5" style={{ maxWidth: 600 }}>
+            <p className="text-muted small mb-3">
+              Send a message to <strong>all users</strong> at once — announcements, tips, deadlines.
+            </p>
+            <div className="d-flex gap-2">
+              <input
+                type="text"
+                className="form-control rounded-pill"
+                placeholder="Type your announcement…"
+                value={broadcastInput}
+                onChange={(e) => setBroadcastInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleBroadcast()}
+              />
+              <button
+                className="btn rounded-pill px-4 fw-semibold flex-shrink-0"
+                style={{ background: '#A31F34', color: '#fff' }}
+                onClick={handleBroadcast}
+                disabled={!broadcastInput.trim()}
+              >
+                <i className="bi bi-megaphone me-2" />Send
+              </button>
+            </div>
+            {broadcastSent && (
+              <div className="alert alert-success rounded-3 mt-3 mb-0 py-2 small">
+                <i className="bi bi-check-circle me-2" />Broadcast sent to all connected users.
+              </div>
+            )}
+          </div>
+
+          {/* ── Inbox ─────────────────────────────────────────────────────────*/}
+          {inbox.length > 0 && (
+            <>
+              <h4 className="fw-bold text-primary-brand mb-3">
+                Message inbox
+                {inbox.reduce((a, c) => a + c.unread, 0) > 0 && (
+                  <span className="badge rounded-pill fw-normal fs-6 ms-2"
+                    style={{ background: '#FCE8E9', color: '#A31F34' }}>
+                    {inbox.reduce((a, c) => a + c.unread, 0)} unread
+                  </span>
+                )}
+              </h4>
+              <div className="card border-0 rounded-4 shadow-sm overflow-hidden mb-5">
+                <div className="table-responsive">
+                  <table className="table table-hover align-middle mb-0">
+                    <thead className="table-light">
+                      <tr>
+                        <th className="ps-4 py-3 fw-semibold text-muted small text-uppercase" style={{ letterSpacing: '0.06em' }}>User</th>
+                        <th className="py-3 fw-semibold text-muted small text-uppercase" style={{ letterSpacing: '0.06em' }}>Last message</th>
+                        <th className="pe-4 py-3 fw-semibold text-muted small text-uppercase" style={{ letterSpacing: '0.06em' }}>Unread</th>
+                        <th className="pe-4 py-3" />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {inbox.map((conv) => (
+                        <tr key={conv.user_id}>
+                          <td className="ps-4">
+                            <div className="fw-semibold">{conv.first_name || conv.username} {conv.last_name}</div>
+                            <div className="text-muted small">@{conv.username}</div>
+                          </td>
+                          <td className="text-muted small" style={{ maxWidth: 280 }}>
+                            {conv.last_message ? (
+                              <span className="text-truncate d-block" style={{ maxWidth: 260 }}>
+                                {conv.last_message.is_mine ? <em className="me-1">You:</em> : null}
+                                {conv.last_message.content}
+                              </span>
+                            ) : '—'}
+                          </td>
+                          <td className="pe-4">
+                            {conv.unread > 0 ? (
+                              <span className="badge rounded-pill" style={{ background: '#A31F34', color: '#fff' }}>
+                                {conv.unread}
+                              </span>
+                            ) : (
+                              <span className="text-muted small">—</span>
+                            )}
+                          </td>
+                          <td className="pe-4 text-end">
+                            <Link href={`/admin/users/${conv.user_id}`}
+                              className="btn btn-sm btn-outline-primary-brand rounded-pill">
+                              Open
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
 
           {/* ── User management ────────────────────────────────────────────── */}
           <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
