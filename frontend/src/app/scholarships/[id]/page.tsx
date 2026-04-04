@@ -85,8 +85,8 @@ export default async function ScholarshipDetailPage({ params }: { params: Promis
             Visit Official Page
           </a>
         )}
-        <Link href={`/ai-review/${scholarship.id}`} className="btn btn-outline-primary-brand btn-lg rounded-pill">
-          💡 AI Essay Review
+        <Link href={`/ai-prep/${scholarship.id}`} className="btn btn-outline-primary-brand btn-lg rounded-pill">
+          💡 AI Assistance
         </Link>
       </div>
     </div>
