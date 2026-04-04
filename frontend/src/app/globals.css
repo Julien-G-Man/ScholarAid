@@ -47,13 +47,16 @@ a:hover { color: #8E1B2C; }
 }
 
 /* ── Footer ── */
-footer {
-  background-color: #212529;
-  border-top: 5px solid var(--primary-brand-red);
-  color: #ccc;
+.footer-link {
+  color: #adb5bd;
+  transition: color 0.2s ease;
 }
-footer a { color: white; }
-footer a:hover { text-decoration: underline; }
+.footer-link:hover { color: white; }
+.footer-icon {
+  color: #adb5bd;
+  transition: color 0.2s ease;
+}
+.footer-icon:hover { color: white; }
 
 /* ── Utility brand classes ── */
 .text-primary-brand { color: var(--primary-brand-red) !important; }
@@ -80,8 +83,8 @@ footer a:hover { text-decoration: underline; }
 
 /* ── Hero ── */
 .hero {
-  background: linear-gradient(rgba(163,31,52,0.9), rgba(163,31,52,0.9)),
-              url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600') center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+              url('/img/graduation.png') center/cover no-repeat;
   min-height: 80vh;
   display: flex;
   align-items: center;
@@ -89,8 +92,8 @@ footer a:hover { text-decoration: underline; }
   color: white;
 }
 .page-hero {
-  background: linear-gradient(rgba(163,31,52,0.85), rgba(163,31,52,0.85)),
-              url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600') center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+              url('/img/asu_students.jpg') center/cover no-repeat;
   min-height: 40vh;
   display: flex;
   align-items: center;
@@ -99,8 +102,8 @@ footer a:hover { text-decoration: underline; }
   margin-bottom: 3rem;
 }
 .contact-hero {
-  background: linear-gradient(rgba(163,31,52,0.9), rgba(163,31,52,0.9)),
-              url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600') center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+              url('/img/students_collaborating.jpg') center/cover no-repeat;
   min-height: 50vh;
   display: flex;
   align-items: center;
@@ -109,9 +112,22 @@ footer a:hover { text-decoration: underline; }
   margin-bottom: 4rem;
 }
 .cta-section {
-  background: linear-gradient(rgba(163,31,52,0.95), rgba(163,31,52,0.95)),
-              url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1600') center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+              url('/img/fulbright_students.jpg') center/cover no-repeat;
   color: white;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-attachment: fixed;
+  background-position: center center;
+}
+
+@media (max-width: 991.98px) {
+  .cta-section {
+    min-height: 55vh;
+    background-attachment: scroll;
+  }
 }
 
 /* ── Cards ── */
@@ -134,30 +150,102 @@ footer a:hover { text-decoration: underline; }
 }
 
 /* ── Contact ── */
-.contact-info-card {
-  background-color: white;
-  border: none;
+.contact-shell {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.95fr) minmax(0, 1.45fr);
+  background: white;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(32, 20, 28, 0.12);
+}
+.contact-panel {
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.12), transparent 34%),
+    linear-gradient(160deg, #7d1829 0%, #a31f34 55%, #c63a53 100%);
+  color: white;
+  padding: 3rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.contact-kicker {
+  display: inline-block;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+}
+.contact-panel-title,
+.contact-form-title {
+  font-size: clamp(2rem, 3vw, 2.7rem);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+.contact-panel-copy {
+  color: rgba(255,255,255,0.84);
+  line-height: 1.75;
+  margin-bottom: 0;
+  max-width: 30rem;
+}
+.contact-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.contact-detail-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.contact-detail-icon {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.16);
+  color: #ffe3e7;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+.contact-detail-icon i {
+  font-size: 1.25rem;
+}
+.contact-detail-item h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+.contact-detail-item p {
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 0.4rem;
+  line-height: 1.6;
+}
+.contact-detail-item span {
+  font-weight: 600;
+  color: white;
+}
+.contact-form-card {
+  padding: 3rem 2.5rem;
+  background:
+    linear-gradient(180deg, rgba(252,232,233,0.38) 0%, rgba(255,255,255,0.96) 24%, #ffffff 100%);
+}
+.contact-input {
   border-radius: 1rem;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  padding: 2.5rem 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-align: center;
-  height: 100%;
+  border: 1px solid rgba(163,31,52,0.12);
+  min-height: 3.75rem;
+  padding: 0.95rem 1.1rem;
+  box-shadow: none !important;
 }
-.contact-info-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+.contact-input:focus {
+  border-color: rgba(163,31,52,0.45);
+  box-shadow: 0 0 0 0.22rem rgba(163,31,52,0.1) !important;
 }
-.contact-info-card .icon {
-  font-size: 3rem;
-  color: var(--primary-brand-red);
-  margin-bottom: 1rem;
-}
-.contact-form-container {
-  background-color: white;
-  border-radius: 1.5rem;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-  padding: 3rem;
+.contact-textarea {
+  min-height: 180px;
+  resize: vertical;
 }
 .section-title {
   font-weight: 700;
@@ -213,4 +301,36 @@ footer a:hover { text-decoration: underline; }
 .tab-nav-link.active {
   color: var(--primary-brand-red);
   border-bottom: 3px solid var(--primary-brand-red);
+}
+
+/* ── AI Prep ── */
+.prose p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.prose strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.prose ul, .prose ol {
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 991.98px) {
+  .contact-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-panel,
+  .contact-form-card {
+    padding: 2rem 1.5rem;
+  }
 }

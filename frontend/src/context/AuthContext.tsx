@@ -7,7 +7,7 @@ import type { User } from '@/types';
 interface AuthContextType {
   user: User | null;
   initialising: boolean;
-  login: (username: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<User>;
   logout: () => Promise<void>;
   setUser: (user: User | null) => void;
 }
@@ -31,9 +31,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .finally(() => setInitialising(false));
   }, []);
 
-  const login = useCallback(async (username: string, password: string) => {
+  const login = useCallback(async (username: string, password: string): Promise<User> => {
     const res = await authService.login(username, password);
     setUser(res.user);
+    return res.user;
   }, []);
 
   const logout = useCallback(async () => {

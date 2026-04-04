@@ -14,6 +14,11 @@ class ScholarshipSerializer(serializers.ModelSerializer):
         ]
 
 
+class ScholarshipQuerySerializer(serializers.Serializer):
+    search = serializers.CharField(required=False, max_length=120, trim_whitespace=True)
+    level = serializers.CharField(required=False, max_length=60, trim_whitespace=True)
+
+
 class NewsletterSubscribeSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsletterSubscription

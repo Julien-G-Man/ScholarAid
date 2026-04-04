@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ScholarAid Frontend
+
+Next.js 16 App Router frontend for ScholarAid.
+
+It provides:
+
+- public scholarship browsing
+- authentication flows
+- AI Prep and AI review session pages
+- user dashboard and profile management
+- admin dashboard and user detail views
+- realtime support messaging via a floating user widget and admin inbox
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies and run the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create `frontend/.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+```
+
+This single variable powers:
+
+- client-side Axios requests
+- server-side fetch helpers
+- the WebSocket base URL used by support messaging
+
+## Key folders
+
+```text
+frontend/src/
+|-- app/          # App Router pages
+|-- components/   # Shared UI including Navbar, Footer, MessagingWidget
+|-- context/      # AuthContext and MessagingContext
+|-- lib/          # Server-side API helpers
+|-- services/     # API clients
+`-- types/        # Shared API payload types
+```
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+Project-specific docs:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Main project README](../README.md)
+- [Frontend architecture docs](../docs/frontend/README.md)
+- [Admin and messaging docs](../docs/admin/README.md)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Framework docs:
+
+- [Next.js Documentation](https://nextjs.org/docs)
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The app can be deployed on Vercel or any platform that supports Next.js 16. Make sure `NEXT_PUBLIC_API_URL` points at the deployed backend API base path.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [deployment docs](../docs/deployment/README.md) for backend and environment details.

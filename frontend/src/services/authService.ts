@@ -25,9 +25,10 @@ const authService = {
   // ─── Login ─────────────────────────────────────────────────────────────────
 
   async login(username: string, password: string): Promise<AuthResponse> {
-    const response = await axiosInstance.post<AuthResponse>('/auth/login/', { username, password });
+    const response = await axiosInstance.post<{ access: string; refresh: string }>('/auth/login/', { username, password });
     authService._storeTokens(response.data.access, response.data.refresh);
-    return response.data;
+    const user = await authService.getProfile();
+    return { ...response.data, user };
   },
 
   // ─── Logout ────────────────────────────────────────────────────────────────
@@ -49,8 +50,11 @@ const authService = {
   async refreshToken(): Promise<string> {
     const refresh = typeof window !== 'undefined' ? localStorage.getItem('refresh_token') : null;
     if (!refresh) throw new Error('No refresh token available.');
-    const response = await axiosInstance.post<{ access: string }>('/auth/token/refresh/', { refresh });
-    if (typeof window !== 'undefined') localStorage.setItem('access_token', response.data.access);
+    const response = await axiosInstance.post<{ access: string; refresh?: string }>('/auth/token/refresh/', { refresh });
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('access_token', response.data.access);
+      if (response.data.refresh) localStorage.setItem('refresh_token', response.data.refresh);
+    }
     return response.data.access;
   },
 
@@ -62,6 +66,14 @@ const authService = {
 
   updateProfile(data: Partial<User>): Promise<User> {
     return axiosInstance.patch<User>('/auth/profile/', data).then((r) => r.data);
+  },
+
+  changePassword(data: {
+    old_password: string;
+    new_password: string;
+    new_password_2: string;
+  }): Promise<{ message: string }> {
+    return axiosInstance.post<{ message: string }>('/auth/change-password/', data).then((r) => r.data);
   },
 
   // ─── Helpers ───────────────────────────────────────────────────────────────

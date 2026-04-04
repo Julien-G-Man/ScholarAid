@@ -20,7 +20,14 @@ async function get<T>(path: string): Promise<T | null> {
 }
 
 export async function fetchFeaturedScholarships(): Promise<Scholarship[]> {
-  return (await get<Scholarship[]>('/scholarships/featured/')) ?? [];
+  try {
+    const res = await fetch(`${BASE}/scholarships/featured/`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    const data = (await res.json()) as Scholarship[] | PaginatedResponse<Scholarship>;
+    return Array.isArray(data) ? data : (data.results ?? []);
+  } catch {
+    return [];
+  }
 }
 
 export async function fetchScholarships(params?: {

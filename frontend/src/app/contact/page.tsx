@@ -43,66 +43,94 @@ export default function ContactPage() {
 
       <section className="py-5">
         <div className="container">
-          <h2 className="section-title text-center">Our Contact Details</h2>
-          <div className="row g-4 mb-5 justify-content-center">
-            <div className="col-md-4">
-              <div className="contact-info-card">
-                <i className="bi bi-envelope-fill icon" />
-                <h4>Email Us</h4>
-                <p>Our friendly team is here to help you.</p>
-                <p className="fw-bold text-primary-brand">support@scholaraid.com</p>
+          <div className="contact-shell">
+            <div className="contact-panel">
+              <div>
+                <span className="contact-kicker">Contact</span>
+                <h2 className="contact-panel-title">Get in touch</h2>
+                <p className="contact-panel-copy">
+                  Reach out for scholarship questions, partnership conversations, or support with using ScholarAid.
+                </p>
               </div>
-            </div>
-            <div className="col-md-4">
-              <div className="contact-info-card">
-                <i className="bi bi-phone-fill icon" />
-                <h4>Call Us</h4>
-                <p>Mon-Fri, 9am-5pm GMT</p>
-                <p className="fw-bold text-primary-brand">+233 509 341 251</p>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="contact-info-card">
-                <i className="bi bi-geo-alt-fill icon" />
-                <h4>Visit Our Office</h4>
-                <p>Find us on the KNUST Campus.</p>
-                <p className="fw-bold text-primary-brand">Kumasi, Ashanti Region, Ghana</p>
-              </div>
-            </div>
-          </div>
 
-          <h2 className="section-title text-center">Send Us a Message</h2>
-          <div className="contact-form-container">
-            {status && (
-              <div className={`alert alert-${status.type === 'success' ? 'success' : 'danger'} mb-4`}>
-                {status.text}
-              </div>
-            )}
-            <form onSubmit={handleSubmit}>
-              <div className="row">
-                <div className="col-md-6 mb-4">
-                  <label htmlFor="name" className="form-label fw-semibold">Your Name</label>
-                  <input type="text" className="form-control rounded-3" id="name" value={fields.name} onChange={handleChange} placeholder="E.g., John Doe" required />
+              <div className="contact-detail-list">
+                <div className="contact-detail-item">
+                  <div className="contact-detail-icon">
+                    <i className="bi bi-envelope-fill" />
+                  </div>
+                  <div>
+                    <h4>Email us</h4>
+                    <p>Our support inbox is open for student and partner enquiries.</p>
+                    <span>support@scholaraid.com</span>
+                  </div>
                 </div>
-                <div className="col-md-6 mb-4">
-                  <label htmlFor="email" className="form-label fw-semibold">Your Email</label>
-                  <input type="email" className="form-control rounded-3" id="email" value={fields.email} onChange={handleChange} placeholder="E.g., john.doe@example.com" required />
+
+                <div className="contact-detail-item">
+                  <div className="contact-detail-icon">
+                    <i className="bi bi-telephone-fill" />
+                  </div>
+                  <div>
+                    <h4>Call us</h4>
+                    <p>Monday to Friday, 9:00 AM to 5:00 PM GMT.</p>
+                    <span>+233 509 341 251</span>
+                  </div>
+                </div>
+
+                <div className="contact-detail-item">
+                  <div className="contact-detail-icon">
+                    <i className="bi bi-geo-alt-fill" />
+                  </div>
+                  <div>
+                    <h4>Visit us</h4>
+                    <p>Based in Kumasi and serving students across Ghana and beyond.</p>
+                    <span>Kumasi, Ashanti Region, Ghana</span>
+                  </div>
                 </div>
               </div>
+            </div>
+
+            <div className="contact-form-card">
               <div className="mb-4">
-                <label htmlFor="subject" className="form-label fw-semibold">Subject</label>
-                <input type="text" className="form-control rounded-3" id="subject" value={fields.subject} onChange={handleChange} placeholder="E.g., Scholarship Inquiry" />
+                <span className="contact-kicker text-primary-brand">Message</span>
+                <h2 className="contact-form-title">Send us a message</h2>
+                <p className="text-muted mb-0">
+                  Tell us what you need and we&apos;ll get back to you as soon as we can.
+                </p>
               </div>
-              <div className="mb-4">
-                <label htmlFor="message" className="form-label fw-semibold">Your Message</label>
-                <textarea className="form-control rounded-3" id="message" rows={6} value={fields.message} onChange={handleChange} placeholder="Type your message here…" required style={{ minHeight: '150px', resize: 'vertical' }} />
-              </div>
-              <div className="d-grid">
-                <button type="submit" className="btn btn-primary-brand btn-lg rounded-pill" disabled={loading}>
-                  {loading ? 'Sending…' : 'Send Message'}
-                </button>
-              </div>
-            </form>
+
+              {status && (
+                <div className={`alert alert-${status.type === 'success' ? 'success' : 'danger'} mb-4`}>
+                  {status.text}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit}>
+                <div className="row g-4">
+                  <div className="col-md-6">
+                    <label htmlFor="name" className="form-label fw-semibold">Your Name</label>
+                    <input type="text" className="form-control contact-input" id="name" value={fields.name} onChange={handleChange} placeholder="John Doe" required />
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="email" className="form-label fw-semibold">Your Email</label>
+                    <input type="email" className="form-control contact-input" id="email" value={fields.email} onChange={handleChange} placeholder="john.doe@example.com" required />
+                  </div>
+                  <div className="col-md-12">
+                    <label htmlFor="subject" className="form-label fw-semibold">Subject</label>
+                    <input type="text" className="form-control contact-input" id="subject" value={fields.subject} onChange={handleChange} placeholder="Scholarship inquiry" />
+                  </div>
+                  <div className="col-md-12">
+                    <label htmlFor="message" className="form-label fw-semibold">Your Message</label>
+                    <textarea className="form-control contact-input contact-textarea" id="message" rows={6} value={fields.message} onChange={handleChange} placeholder="How can we help you today?" required />
+                  </div>
+                  <div className="col-12">
+                    <button type="submit" className="btn btn-primary-brand btn-lg rounded-pill px-5" disabled={loading}>
+                      <i className="bi bi-send me-2" />
+                      {loading ? 'Sending…' : 'Send Message'}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </section>

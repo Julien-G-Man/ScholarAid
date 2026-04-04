@@ -8,7 +8,25 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-5">
+      {/* Short intro */}
+      <section className="py-5 border-bottom">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-8 text-center">
+              <p className="lead text-muted">
+                ScholarAid is a scholarship platform that helps students discover curated global opportunities, stay on top
+                of application requirements, and get extra support when they need it. Browse scholarships by level and field,
+                manage your application journey, and use AI feedback as a practical layer on top of the core experience.
+                Whether you&apos;re just starting your search or getting ready to submit, ScholarAid is built to make each
+                step clearer and easier to navigate.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mission */}
+      <section className="py-5 bg-light-brand">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-5 mb-4 mb-md-0">
@@ -26,7 +44,7 @@ export default function AboutPage() {
             <div className="col-md-7">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800"
+                src="/img/students_collaborating.jpg"
                 className="img-fluid rounded-4 shadow-lg"
                 alt="Students discussing"
                 style={{ maxHeight: '380px', objectFit: 'cover', width: '100%' }}
@@ -36,41 +54,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-5 bg-light-brand">
-        <div className="container text-center">
-          <h2 className="fw-bold text-primary-brand mb-5">Why ScholarAid?</h2>
-          <div className="row g-4 justify-content-center">
-            <div className="col-md-4">
-              <div className="card p-4 h-100 shadow-sm border-0 rounded-4 feature-box">
-                <div className="card-body">
-                  <i className="bi bi-globe display-4 text-primary-brand mb-3 d-block" />
-                  <h4 className="fw-bold">Global Opportunities</h4>
-                  <p className="text-muted">Access a vast database of scholarships from around the world.</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card p-4 h-100 shadow-sm border-0 rounded-4 feature-box">
-                <div className="card-body">
-                  <i className="bi bi-robot display-4 text-primary-brand mb-3 d-block" />
-                  <h4 className="fw-bold">AI-Powered Assistance</h4>
-                  <p className="text-muted">Receive smart feedback on your applications and essays.</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card p-4 h-100 shadow-sm border-0 rounded-4 feature-box">
-                <div className="card-body">
-                  <i className="bi bi-people display-4 text-primary-brand mb-3 d-block" />
-                  <h4 className="fw-bold">Community Focus</h4>
-                  <p className="text-muted">We prioritize support for students from diverse backgrounds.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      {/* Vision */}
       <section className="py-5">
         <div className="container">
           <div className="row align-items-center flex-row-reverse">
@@ -88,11 +72,47 @@ export default function AboutPage() {
             <div className="col-md-6">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800"
+                src="/img/graduation.png"
                 className="img-fluid rounded-4 shadow-lg"
                 alt="Graduation ceremony"
                 style={{ objectFit: 'cover', width: '100%' }}
               />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why ScholarAid */}
+      <section className="py-5">
+        <div className="container text-center">
+          <h2 className="fw-bold text-primary-brand mb-5">Why ScholarAid?</h2>
+          <div className="row g-4 justify-content-center">
+            <div className="col-md-4">
+              <div className="card p-4 h-100 shadow-sm border-0 rounded-4 feature-box">
+                <div className="card-body">
+                  <i className="bi bi-globe display-4 text-primary-brand mb-3 d-block" />
+                  <h4 className="fw-bold">Global Opportunities</h4>
+                  <p className="text-muted">Access a vast database of scholarships from around the world.</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="card p-4 h-100 shadow-sm border-0 rounded-4 feature-box">
+                <div className="card-body">
+                  <i className="bi bi-robot display-4 text-primary-brand mb-3 d-block" />
+                  <h4 className="fw-bold">Application Support</h4>
+                  <p className="text-muted">Use AI guidance and review tools to strengthen essays and prepare with more confidence.</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="card p-4 h-100 shadow-sm border-0 rounded-4 feature-box">
+                <div className="card-body">
+                  <i className="bi bi-people display-4 text-primary-brand mb-3 d-block" />
+                  <h4 className="fw-bold">Community Focus</h4>
+                  <p className="text-muted">We prioritize support for students from diverse backgrounds.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
