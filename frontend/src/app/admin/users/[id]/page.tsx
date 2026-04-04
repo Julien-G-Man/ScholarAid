@@ -125,6 +125,12 @@ export default function AdminUserDetailPage() {
     setChatInput('');
   }
 
+  function handleDeleteMessage(messageId: number) {
+    api.deleteMessage(messageId).then(() => {
+      setChatMessages((prev) => prev.filter((m) => m.id !== messageId));
+    }).catch(() => {});
+  }
+
   const u = detail?.user;
   const sessions = detail?.sessions ?? [];
   const scores = sessions.filter((s) => s.feedback).map((s) => s.feedback!.overall_score);
@@ -412,7 +418,19 @@ export default function AdminUserDetailPage() {
                   </div>
                 ) : (
                   chatMessages.map((m) => (
-                    <div key={m.id} className={`d-flex ${m.is_mine ? 'justify-content-end' : 'justify-content-start'}`}>
+                    <div key={m.id} className={`d-flex align-items-end gap-1 ${m.is_mine ? 'justify-content-end' : 'justify-content-start'}`}>
+                      {!m.is_mine && (
+                        <button
+                          className="btn btn-link p-0 flex-shrink-0 opacity-0 hover-opacity-100"
+                          title="Delete message"
+                          style={{ color: '#A31F34', fontSize: '0.7rem', lineHeight: 1 }}
+                          onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+                          onMouseLeave={(e) => (e.currentTarget.style.opacity = '0')}
+                          onClick={() => handleDeleteMessage(m.id)}
+                        >
+                          <i className="bi bi-trash3" />
+                        </button>
+                      )}
                       <div
                         className="rounded-3 px-3 py-2"
                         style={{
@@ -433,6 +451,18 @@ export default function AdminUserDetailPage() {
                           {new Date(m.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                         </div>
                       </div>
+                      {m.is_mine && (
+                        <button
+                          className="btn btn-link p-0 flex-shrink-0 opacity-0"
+                          title="Delete message"
+                          style={{ color: '#A31F34', fontSize: '0.7rem', lineHeight: 1 }}
+                          onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+                          onMouseLeave={(e) => (e.currentTarget.style.opacity = '0')}
+                          onClick={() => handleDeleteMessage(m.id)}
+                        >
+                          <i className="bi bi-trash3" />
+                        </button>
+                      )}
                     </div>
                   ))
                 )}

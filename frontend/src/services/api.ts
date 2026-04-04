@@ -167,6 +167,10 @@ const api = {
   getAdminConversation(userId: number): Promise<Message[]> {
     return axiosInstance.get(`/admin/messages/${userId}/`).then((r) => r.data);
   },
+
+  deleteMessage(messageId: number): Promise<void> {
+    return axiosInstance.delete(`/admin/messages/delete/${messageId}/`).then(() => undefined);
+  },
 };
 
 export default api;
