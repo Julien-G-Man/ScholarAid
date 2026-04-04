@@ -40,7 +40,10 @@
 ScholarAid/
 ├── backend/
 │   ├── config/           Settings, URL root
-│   ├── admin_api/        Admin dashboard APIs + admin scholarship intake APIs
+│   ├── admin_api/        Admin dashboard APIs + scholarship management APIs
+│   │   ├── views.py      Admin dashboard/users/messaging views
+│   │   ├── scholarship_management_views.py
+│   │   │                 Scholarship extract/create/list/edit/delete/bulk-delete views
 │   ├── core/             Scholarships, newsletter, contact
 │   ├── users/            Auth, profiles
 │   ├── ai_review/        Essay review
@@ -55,6 +58,7 @@ ScholarAid/
 │   └── data/             Generated CSVs + status JSON
 └── frontend/src/
     ├── app/
+    │   ├── admin/scholarships/           Scholarship manager (table + edit/delete tools)
     │   ├── admin/scholarships/intake/    AI single-item intake
     │   └── admin/scholarships/pipeline/  Bulk scraper pipeline UI
     ├── components/
@@ -119,7 +123,12 @@ npm run dev
 | GET/PATCH | `/api/v1/auth/profile/` | Auth | View/update profile |
 | POST | `/api/v1/ai-review/<id>/` | Auth | Submit essay for AI review |
 | POST | `/api/v1/admin/scholarships/extract/` | Admin | AI-extract fields from URL/text |
+| GET | `/api/v1/admin/scholarships/` | Admin | List scholarships (admin filters + pagination) |
 | POST | `/api/v1/admin/scholarships/` | Admin | Create scholarship after review |
+| GET | `/api/v1/admin/scholarships/<id>/` | Admin | Get a single scholarship |
+| PATCH | `/api/v1/admin/scholarships/<id>/` | Admin | Update scholarship fields |
+| DELETE | `/api/v1/admin/scholarships/<id>/` | Admin | Delete one scholarship |
+| POST | `/api/v1/admin/scholarships/bulk-delete/` | Admin | Dry-run or execute filtered/all bulk deletion |
 | POST | `/api/v1/admin/scraper/scrape/` | Admin | Start bulk scrape job |
 | GET | `/api/v1/admin/scraper/status/` | Admin | Poll job status |
 | GET | `/api/v1/admin/scraper/download/` | Admin | Download latest scraped CSV |
@@ -199,10 +208,11 @@ The limit applies to *valid, non-expired* scholarships collected. The scraper ma
 
 ---
 
-## AI Intake (Admin — single scholarship)
+## Admin Scholarship Tools
 
-Staff users see an **Admin** dropdown in the navbar with two options:
+Admin scholarship operations are grouped under the admin dashboard tools:
 
+- **Manage Scholarships** — `/admin/scholarships`: searchable table for list/edit/delete plus single and bulk cleanup operations.
 - **AI Intake (single)** — `/admin/scholarships/intake`: paste a URL or raw text, Claude extracts all fields, you review and edit, then save.
 - **Scraper Pipeline** — `/admin/scholarships/pipeline`: bulk scrape, download CSV, review, upload, ingest.
 

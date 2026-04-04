@@ -8,8 +8,14 @@ Admin tooling in ScholarAid is split across two backend areas:
 The frontend admin experience lives in:
 
 - `frontend/src/app/admin/page.tsx`
+- `frontend/src/app/admin/scholarships/page.tsx`
 - `frontend/src/app/admin/users/[id]/page.tsx`
 - `frontend/src/context/MessagingContext.tsx`
+
+Scholarship admin views are split into:
+
+- `backend/admin_api/views.py` for dashboard/users/messaging
+- `backend/admin_api/scholarship_management_views.py` for scholarship intake + management CRUD/bulk-delete
 
 ---
 
@@ -148,6 +154,25 @@ Ownership split:
 - `admin_api`: admin dashboard, users, admin messaging, admin scholarship intake
 - `scraper`: scraping and ingest logic/endpoints
 - `core`: public scholarship APIs
+
+---
+
+## Scholarship Manager (Admin)
+
+Admin scholarship management endpoints:
+
+- `GET /api/v1/admin/scholarships/` (filters: `search`, `provider`, `level`, `year`, `limit`, `offset`)
+- `POST /api/v1/admin/scholarships/`
+- `GET /api/v1/admin/scholarships/<scholarship_id>/`
+- `PATCH /api/v1/admin/scholarships/<scholarship_id>/`
+- `DELETE /api/v1/admin/scholarships/<scholarship_id>/`
+- `POST /api/v1/admin/scholarships/bulk-delete/`
+
+Bulk-delete payload supports:
+
+- filtered cleanup (`years`, `deadline_year_lte`, `provider_contains`, `name_contains`, `description_contains`)
+- full cleanup (`delete_all: true`)
+- safety controls (`dry_run`, `confirm`)
 
 ---
 

@@ -158,3 +158,8 @@ Ownership:
 - `admin_api`: admin dashboard + admin scholarship intake endpoints (`/api/v1/admin/*`)
 - `scraper`: scraping + ingest endpoints/logic (`/api/v1/admin/scraper/*`)
 - `core`: public scholarship/newsletter/contact APIs
+
+Admin scholarship management:
+
+- UI: `/admin/scholarships` (table-based list/edit/delete/bulk cleanup)
+- Backend views: `backend/admin_api/scholarship_management_views.py`
