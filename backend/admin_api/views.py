@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 
 from core.models import ContactMessage, NewsletterSubscription, Scholarships
 from ai_review.models import AIReviewSession, ChatMessage
+from messaging.models import Message
 
 
 class AdminStatsView(APIView):
@@ -29,7 +30,9 @@ class AdminStatsView(APIView):
         ).count()
         total_scholarships = Scholarships.objects.count()
         newsletter_subs = NewsletterSubscription.objects.count()
-        unread_messages = ContactMessage.objects.filter(is_read=False).count()
+        unread_messages = Message.objects.filter(
+            recipient=request.user, is_read=False, sender__is_superuser=False
+        ).count()
         total_messages = ContactMessage.objects.count()
 
         # ── AI Activity ───────────────────────────────────────────────────────

@@ -21,6 +21,7 @@ import {
   useState,
 } from 'react';
 import { useAuth } from './AuthContext';
+import api from '@/services/api';
 import type { Message } from '@/types';
 
 interface MessagingCtx {
@@ -102,6 +103,11 @@ export function MessagingProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (user) {
       connect();
+      // Seed unread count from REST so messages sent before WS connected are counted
+      const fetchUnread = user.is_staff || user.is_superuser
+        ? api.getAdminUnreadCount()
+        : api.getMyUnreadCount();
+      fetchUnread.then(({ unread }) => setUnread(unread)).catch(() => {});
     } else {
       // User logged out — close connection
       wsRef.current?.close();
@@ -137,7 +143,12 @@ export function MessagingProvider({ children }: { children: React.ReactNode }) {
       type: 'mark_read',
       ...(userId != null ? { user_id: userId } : {}),
     }));
-    setUnread(0);
+    // Re-fetch the true unread count instead of resetting to 0,
+    // so opening one admin conversation doesn't clear other threads' badges.
+    const fetchUnread = userId != null
+      ? api.getAdminUnreadCount()
+      : api.getMyUnreadCount();
+    fetchUnread.then(({ unread }) => setUnread(unread)).catch(() => setUnread(0));
   }, []);
 
   return (
