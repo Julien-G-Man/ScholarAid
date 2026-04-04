@@ -48,11 +48,30 @@ export default function Navbar() {
             {user ? (
               <>
                 {user.is_staff && (
-                  <li className="nav-item">
-                    <Link className="nav-link" href="/admin/scholarships/intake">
-                      <i className="bi bi-stars me-1" />
-                      AI Intake
-                    </Link>
+                  <li className="nav-item dropdown">
+                    <button
+                      className="nav-link dropdown-toggle border-0 bg-transparent"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      type="button"
+                    >
+                      <i className="bi bi-shield-lock me-1" />
+                      Admin
+                    </button>
+                    <ul className="dropdown-menu dropdown-menu-end">
+                      <li>
+                        <Link className="dropdown-item" href="/admin/scholarships/intake">
+                          <i className="bi bi-stars me-2" />
+                          AI Intake (single)
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="dropdown-item" href="/admin/scholarships/pipeline">
+                          <i className="bi bi-diagram-3 me-2" />
+                          Scraper Pipeline
+                        </Link>
+                      </li>
+                    </ul>
                   </li>
                 )}
                 <li className="nav-item">

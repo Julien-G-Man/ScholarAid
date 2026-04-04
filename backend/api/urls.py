@@ -2,10 +2,11 @@
 API v1 URL router — routes to each Django app's own api_urls.py.
 Each app owns its serializers, views and URL patterns for clear separation of concern.
 
-  /api/v1/auth/          → users.api_urls
-  /api/v1/               → core.api_urls  (scholarships, newsletter)
-  /api/v1/               → ai_review.api_urls
-  /api/v1/admin/         → core.admin_api_urls  (admin scholarship intake)
+  /api/v1/auth/              → users.api_urls
+  /api/v1/                   → core.api_urls  (scholarships, newsletter)
+  /api/v1/                   → ai_review.api_urls
+  /api/v1/admin/             → core.admin_api_urls  (AI intake, create)
+  /api/v1/admin/scraper/     → scraper.admin_api_urls  (scrape, ingest, download)
 """
 
 from django.urls import path, include
@@ -22,4 +23,7 @@ urlpatterns = [
 
     # Admin-only scholarship management (AI intake, create)
     path('admin/', include('core.admin_api_urls')),
+
+    # Admin-only scraper pipeline (scrape portals → CSV → ingest)
+    path('admin/', include('scraper.admin_api_urls')),
 ]

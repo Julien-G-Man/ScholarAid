@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'core',
     'users',
     'ai_review',
+    'scraper',
 ]
 
 MIDDLEWARE = [
