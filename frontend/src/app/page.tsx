@@ -39,7 +39,7 @@ export default function HomePage() {
             </div>
             <div className="col-md-4">
               <div className="feature-box p-4 shadow-sm rounded-4 h-100 bg-white">
-                <h3 className="fw-bold text-primary-brand">🤖 AI Essay Review</h3>
+                <h3 className="fw-bold text-primary-brand">🤖 AI Review</h3>
                 <p className="text-muted">Use AI guidance to refine essays and approach each application with more confidence.</p>
               </div>
             </div>
@@ -70,7 +70,7 @@ export default function HomePage() {
       <section className="py-5 text-center cta-section">
         <div className="container">
           <h2 className="fw-bold mb-3 text-white">Not sure if you&apos;re ready?</h2>
-          <p className="lead mb-4 text-white">Get quick guidance on your essay before you move on to the bigger application steps.</p>
+          <p className="lead mb-4 text-white">Get quick guidance before you move on to the bigger application steps.</p>
           <Link href="/ai-prep" className="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-lg">
             💡 Try AI Review
           </Link>
