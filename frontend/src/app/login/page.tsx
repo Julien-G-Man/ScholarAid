@@ -23,7 +23,7 @@ export default function LoginPage() {
     setError(null);
     try {
       await login(fields.username, fields.password);
-      router.push('/');
+      router.push('/dashboard');
     } catch {
       setError('Invalid username or password.');
     } finally {

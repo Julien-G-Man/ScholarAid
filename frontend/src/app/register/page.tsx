@@ -36,7 +36,7 @@ export default function RegisterPage() {
     try {
       const res = await authService.register(fields);
       setUser(res.user);
-      router.push('/');
+      router.push('/dashboard');
     } catch (err: unknown) {
       const data = (err as { response?: { data?: Record<string, string[]> } })?.response?.data ?? {};
       const flat: typeof errors = {};

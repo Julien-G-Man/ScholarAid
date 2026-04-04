@@ -71,7 +71,7 @@ export default function HomePage() {
         <div className="container">
           <h2 className="fw-bold mb-3 text-white">Not sure if you&apos;re ready?</h2>
           <p className="lead mb-4 text-white">Get quick guidance on your essay before you move on to the bigger application steps.</p>
-          <Link href="/ai-review/1" className="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-lg">
+          <Link href="/ai-prep" className="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-lg">
             💡 Try AI Review
           </Link>
         </div>
