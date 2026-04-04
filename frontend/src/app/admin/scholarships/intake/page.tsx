@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/services/api';
@@ -52,12 +53,12 @@ export default function ScholarshipIntakePage() {
 
   // Guard: redirect non-admins once auth is resolved
   useEffect(() => {
-    if (!initialising && (!user || !user.is_staff)) {
+    if (!initialising && (!user || (!user.is_staff && !user.is_superuser))) {
       router.replace('/');
     }
   }, [initialising, user, router]);
 
-  if (initialising || !user?.is_staff) {
+  if (initialising || (!user?.is_staff && !user?.is_superuser)) {
     return (
       <div className="container py-5 text-center">
         <div className="spinner-border text-danger" role="status">
@@ -129,7 +130,7 @@ export default function ScholarshipIntakePage() {
         </p>
         <div className="d-flex gap-3 justify-content-center">
           <button
-            className="btn btn-outline-secondary rounded-pill px-4"
+            className="btn btn-outline-primary-brand rounded-pill px-4"
             onClick={() => {
               setDraft(EMPTY_DRAFT);
               setInputContent('');
@@ -155,14 +156,20 @@ export default function ScholarshipIntakePage() {
   if (step === 'input') {
     return (
       <>
-        <div className="page-hero d-flex flex-column justify-content-center align-items-center">
-          <div className="container text-center">
-            <h1 className="display-4 fw-bold">AI Scholarship Intake</h1>
-            <p className="lead">
-              Paste a URL or raw text — Claude will extract and pre-fill the scholarship fields for you.
-            </p>
+        <section className="bg-light-brand py-4 border-bottom">
+          <div className="container">
+            <div className="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+              <div>
+                <h1 className="fw-bold text-primary-brand mb-1">AI Scholarship Intake</h1>
+                <p className="text-muted mb-0">Paste a URL or raw text, then review and save extracted fields.</p>
+              </div>
+              <Link href="/admin" className="btn btn-outline-primary-brand rounded-pill flex-shrink-0">
+                <i className="bi bi-arrow-left me-2" />
+                Back to Admin
+              </Link>
+            </div>
           </div>
-        </div>
+        </section>
 
         <section className="py-5">
           <div className="container" style={{ maxWidth: 720 }}>
@@ -263,14 +270,20 @@ export default function ScholarshipIntakePage() {
 
   return (
     <>
-      <div className="page-hero d-flex flex-column justify-content-center align-items-center">
-        <div className="container text-center">
-          <h1 className="display-4 fw-bold">Review & Save</h1>
-          <p className="lead">
-            Check the extracted fields, edit anything that looks off, then save.
-          </p>
+      <section className="bg-light-brand py-4 border-bottom">
+        <div className="container">
+          <div className="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+            <div>
+              <h1 className="fw-bold text-primary-brand mb-1">Review and Save</h1>
+              <p className="text-muted mb-0">Check extracted fields, edit where needed, then save.</p>
+            </div>
+            <Link href="/admin" className="btn btn-outline-primary-brand rounded-pill flex-shrink-0">
+              <i className="bi bi-arrow-left me-2" />
+              Back to Admin
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
 
       <section className="py-5">
         <div className="container" style={{ maxWidth: 860 }}>
@@ -278,7 +291,7 @@ export default function ScholarshipIntakePage() {
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h4 className="fw-bold mb-0">Extracted Fields</h4>
               <button
-                className="btn btn-outline-secondary btn-sm rounded-pill"
+                className="btn btn-outline-primary-brand btn-sm rounded-pill"
                 onClick={() => { setStep('input'); setSaveError(null); }}
               >
                 <i className="bi bi-arrow-left me-1" />
@@ -416,3 +429,4 @@ export default function ScholarshipIntakePage() {
     </>
   );
 }
+

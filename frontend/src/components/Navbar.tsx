@@ -6,7 +6,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useMessaging } from '@/context/MessagingContext';
-import { Collapse } from 'bootstrap';
+
+type CollapseLike = {
+  hide: () => void;
+};
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -14,11 +17,15 @@ export default function Navbar() {
   const router = useRouter();
   const navbarRef = useRef<HTMLElement>(null);
   const navbarCollapseRef = useRef<HTMLDivElement>(null);
-  const collapseRef = useRef<Collapse | null>(null);
+  const collapseRef = useRef<CollapseLike | null>(null);
 
   useEffect(() => {
+    let mounted = true;
     if (navbarCollapseRef.current) {
-      collapseRef.current = new Collapse(navbarCollapseRef.current, { toggle: false });
+      import('bootstrap').then(({ Collapse }) => {
+        if (!mounted || !navbarCollapseRef.current) return;
+        collapseRef.current = new Collapse(navbarCollapseRef.current, { toggle: false });
+      });
     }
 
     const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
@@ -37,6 +44,7 @@ export default function Navbar() {
     document.addEventListener('touchstart', handleOutsideClick);
 
     return () => {
+      mounted = false;
       document.removeEventListener('mousedown', handleOutsideClick);
       document.removeEventListener('touchstart', handleOutsideClick);
     };

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import axiosInstance from '@/services/axiosInstance';
@@ -76,7 +77,7 @@ export default function PipelinePage() {
 
   // Guard: non-admins redirected
   useEffect(() => {
-    if (!initialising && (!user || !user.is_staff)) {
+    if (!initialising && (!user || (!user.is_staff && !user.is_superuser))) {
       router.replace('/');
     }
   }, [initialising, user, router]);
@@ -93,7 +94,7 @@ export default function PipelinePage() {
   }, []);
 
   useEffect(() => {
-    if (!user?.is_staff) return;
+    if (!user?.is_staff && !user?.is_superuser) return;
     fetchStatus();
 
     // Poll every 4 s while a job is running
@@ -167,7 +168,7 @@ export default function PipelinePage() {
 
   // ── Render guards ────────────────────────────────────────────────────────────
 
-  if (initialising || !user?.is_staff) {
+  if (initialising || (!user?.is_staff && !user?.is_superuser)) {
     return (
       <div className="container py-5 text-center">
         <div className="spinner-border text-danger" role="status">
@@ -183,14 +184,20 @@ export default function PipelinePage() {
 
   return (
     <>
-      <div className="page-hero d-flex flex-column justify-content-center align-items-center">
-        <div className="container text-center">
-          <h1 className="display-4 fw-bold">Scholarship Pipeline</h1>
-          <p className="lead">
+      <section className="bg-light-brand py-4 border-bottom">
+        <div className="container">
+          <h1 className="fw-bold text-primary-brand mb-1">Scholarship Pipeline</h1>
+          <div className="mt-3 mb-2">
+            <Link href="/admin" className="btn btn-outline-primary-brand rounded-pill">
+              <i className="bi bi-arrow-left me-2" />
+              Back to Admin
+            </Link>
+          </div>
+          <p className="text-muted mb-0">
             Scrape portals → Claude cleans data → download CSV → review → upload → ingest
           </p>
         </div>
-      </div>
+      </section>
 
       <section className="py-5">
         <div className="container" style={{ maxWidth: 860 }}>
@@ -300,7 +307,7 @@ export default function PipelinePage() {
 
                 <div className="d-flex gap-3 align-items-center flex-wrap">
                   <button
-                    className="btn btn-outline-secondary rounded-pill px-4"
+                    className="btn btn-outline-primary-brand rounded-pill px-4"
                     onClick={handleDownload}
                     disabled={!csvAvailable}
                   >
@@ -400,14 +407,14 @@ export default function PipelinePage() {
 
             {/* ── Quick links ───────────────────────────────────────────── */}
             <div className="col-12 text-center pt-2">
-              <a href="/scholarships" className="btn btn-outline-secondary rounded-pill px-4 me-2">
+              <Link href="/scholarships" className="btn btn-outline-primary-brand rounded-pill px-4 me-2">
                 <i className="bi bi-list-ul me-1" />
                 View Scholarships
-              </a>
-              <a href="/admin/scholarships/intake" className="btn btn-outline-secondary rounded-pill px-4">
+              </Link>
+              <Link href="/admin/scholarships/intake" className="btn btn-outline-primary-brand rounded-pill px-4">
                 <i className="bi bi-stars me-1" />
                 AI Intake (single)
-              </a>
+              </Link>
             </div>
 
           </div>

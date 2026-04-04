@@ -138,3 +138,23 @@ A card component for the scholarships grid. Displays name, provider, level, dead
 #### `ScholarshipFilters` (`components/ScholarshipFilters.tsx`)
 
 A client component (uses `useSearchParams` and `useRouter`) that renders a search input and a level dropdown. On change it updates the URL query string, which triggers a re-render of the server-side `ScholarshipsPage`.
+
+---
+
+## Scraper Pipeline Strategy (Current)
+
+Scholarships are also populated through admin-only APIs and the scraper pipeline.
+
+Current scraping strategy:
+
+1. Navigation stage (`scraper/scrapers/*.py`): scrape listing pages and collect detail-page HTML.
+2. AI extraction stage (`scraper/pipeline.py`): send HTML batches to Claude for field extraction and normalization.
+3. Validation/filtering: drop malformed items and skip expired deadlines.
+4. Human review loop: write CSV first, then admin reviews/edits before ingest.
+5. Ingest stage (`/api/v1/admin/scraper/ingest/` or `manage.py ingest_scholarships`): write to DB with duplicate checks on `name + provider`.
+
+Ownership:
+
+- `admin_api`: admin dashboard + admin scholarship intake endpoints (`/api/v1/admin/*`)
+- `scraper`: scraping + ingest endpoints/logic (`/api/v1/admin/scraper/*`)
+- `core`: public scholarship/newsletter/contact APIs

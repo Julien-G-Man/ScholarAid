@@ -36,8 +36,7 @@ urlpatterns = [
     path('api/v1/', include('core.api_urls')),
     path('api/v1/', include('ai_review.api_urls')),
     path('api/v1/', include('admin_api.urls')),
-    path('api/v1/admin/', include('core.admin_api_urls')),
-    path('api/v1/admin/', include('scraper.admin_api_urls')),
+    path('api/v1/', include('scraper.urls')),
     path('api/v1/', include('messaging.urls')),
 ]
 

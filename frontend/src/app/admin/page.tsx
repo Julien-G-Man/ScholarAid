@@ -87,34 +87,35 @@ export default function AdminPage() {
     const fromId = lastMessage.from_user_id;
     if (!fromId) return;
 
-    const newLastMsg = {
+    const newLastMsg: NonNullable<AdminConversation['last_message']> = {
       content: lastMessage.content,
       created_at: lastMessage.created_at,
       is_mine: false,
     };
 
-    setInbox((prev) => {
+    setInbox((prev: AdminConversation[]): AdminConversation[] => {
       const exists = prev.find((c) => c.user_id === fromId);
       if (exists) {
-        const updated = prev.map((c) =>
+        const updated: AdminConversation[] = prev.map((c) =>
           c.user_id === fromId
             ? { ...c, unread: c.unread + 1, last_message: newLastMsg }
             : c
         );
         // re-sort: most recent first
         return [...updated].sort((a, b) =>
-          (b.last_message?.created_at ?? '') > (a.last_message?.created_at ?? '') ? 1 : -1
+          (b.last_message?.created_at ?? '').localeCompare(a.last_message?.created_at ?? '')
         );
       }
       // New conversation — prepend
-      return [{
+      const newConversation: AdminConversation = {
         user_id: fromId,
         username: lastMessage.from_username ?? '',
         first_name: lastMessage.from_name?.split(' ')[0] ?? '',
         last_name: lastMessage.from_name?.split(' ').slice(1).join(' ') ?? '',
         unread: 1,
         last_message: newLastMsg,
-      }, ...prev];
+      };
+      return [newConversation, ...prev];
     });
   }, [lastMessage]);
 

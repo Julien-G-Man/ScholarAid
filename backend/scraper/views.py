@@ -1,12 +1,3 @@
-"""
-Admin-only API views for the scholarship scraper pipeline.
-
-  POST /api/v1/admin/scraper/scrape/     — trigger a background scrape job
-  GET  /api/v1/admin/scraper/status/     — poll job status
-  GET  /api/v1/admin/scraper/download/   — download the latest scraped CSV
-  POST /api/v1/admin/scraper/ingest/     — upload a CSV file and ingest it
-"""
-
 import threading
 from datetime import datetime
 from pathlib import Path
@@ -19,10 +10,8 @@ from rest_framework.views import APIView
 
 from . import status as st
 from .scrapers.mastersportal import SCRAPER_REGISTRY
-from .tasks import run_scrape, run_ingest, CSV_FIELDS
+from .tasks import run_scrape, run_ingest
 
-
-# ── Background thread helpers ─────────────────────────────────────────────────
 
 def _scrape_in_background(source: str, limit: int, csv_path: Path):
     try:
@@ -38,19 +27,7 @@ def _ingest_in_background(csv_path: Path):
         st.ingest_error(str(exc))
 
 
-# ── Views ─────────────────────────────────────────────────────────────────────
-
 class ScrapeView(APIView):
-    """
-    POST /api/v1/admin/scraper/scrape/
-
-    Body (JSON):
-      { "source": "mastersportal", "limit": 500 }
-
-    Starts a background scrape job.  Returns 202 immediately.
-    Poll /scraper/status/ for progress.
-    """
-
     permission_classes = [IsAdminUser]
 
     def post(self, request):
@@ -84,29 +61,15 @@ class ScrapeView(APIView):
 
 
 class ScrapeStatusView(APIView):
-    """
-    GET /api/v1/admin/scraper/status/
-
-    Returns the current state of both scrape and ingest jobs.
-    """
-
     permission_classes = [IsAdminUser]
 
     def get(self, request):
         data = st.read()
-        # Add download availability flag
         csv_available = st.latest_csv_path() is not None
         return Response({**data, 'csv_available': csv_available})
 
 
 class CSVDownloadView(APIView):
-    """
-    GET /api/v1/admin/scraper/download/
-
-    Serves the most recently scraped CSV file as a download.
-    Returns 404 if no CSV exists yet.
-    """
-
     permission_classes = [IsAdminUser]
 
     def get(self, request):
@@ -114,27 +77,15 @@ class CSVDownloadView(APIView):
         if not csv_path:
             raise Http404('No scraped CSV available yet.')
 
-        response = FileResponse(
+        return FileResponse(
             open(csv_path, 'rb'),
             content_type='text/csv',
             as_attachment=True,
             filename=csv_path.name,
         )
-        return response
 
 
 class IngestView(APIView):
-    """
-    POST /api/v1/admin/scraper/ingest/
-
-    Accepts a multipart CSV file upload and ingests it into the database.
-    The file must have the columns: name, provider, institution, level,
-    description, eligibility, essay_prompt, deadline, link, logo_url.
-
-    Ingestion runs synchronously (file is small enough that async is unnecessary).
-    For large files the background thread approach used by ScrapeView can be applied.
-    """
-
     permission_classes = [IsAdminUser]
     parser_classes = [MultiPartParser, FormParser]
 
@@ -150,13 +101,11 @@ class IngestView(APIView):
         if not upload.name.endswith('.csv'):
             return Response({'error': 'Uploaded file must be a .csv'}, status=400)
 
-        # Save uploaded file to data dir
         dest = st.data_dir() / f'upload_{upload.name}'
         with dest.open('wb') as fh:
             for chunk in upload.chunks():
                 fh.write(chunk)
 
-        # Run ingest in background so the request returns quickly
         t = threading.Thread(
             target=_ingest_in_background,
             args=(dest,),

@@ -40,11 +40,11 @@
 ScholarAid/
 ├── backend/
 │   ├── config/           Settings, URL root
-│   ├── api/              API v1 URL router
-│   ├── core/             Scholarships, newsletter, contact, AI intake
+│   ├── admin_api/        Admin dashboard APIs + admin scholarship intake APIs
+│   ├── core/             Scholarships, newsletter, contact
 │   ├── users/            Auth, profiles
 │   ├── ai_review/        Essay review
-│   ├── scraper/          Bulk scraper pipeline
+│   ├── scraper/          Bulk scraping pipeline (owns scrape/ingest logic + endpoints)
 │   │   ├── scrapers/     Per-site scraper classes
 │   │   ├── management/commands/
 │   │   │   ├── scrape_scholarships.py
@@ -129,6 +129,22 @@ npm run dev
 
 ## Scraper Pipeline (Admin)
 
+### Strategy (high level)
+
+The scraper follows a navigation + AI extraction strategy:
+
+- Site scrapers (`scraper/scrapers/*.py`) handle pagination and detail-page discovery only.
+- Raw detail-page HTML is sent to `scraper/pipeline.py` for Claude extraction and normalization.
+- Validation/filtering runs before output: malformed records are dropped and expired deadlines are skipped.
+- Results are written to CSV first for human review.
+- Final DB writes happen only during ingest (API or CLI), with duplicate checks (`name + provider`).
+
+### Ownership
+
+- `admin_api` owns admin dashboard + admin scholarship intake endpoints (`/api/v1/admin/*`).
+- `scraper` owns scraper endpoints and scraping/ingest logic (`/api/v1/admin/scraper/*`).
+- `core` owns public scholarship/newsletter/contact APIs.
+
 ### How it works
 
 ```
@@ -193,3 +209,4 @@ Staff users see an **Admin** dropdown in the navbar with two options:
 ## License
 
 MIT
+

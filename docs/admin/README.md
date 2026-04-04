@@ -126,6 +126,31 @@ Admin-facing chat UI:
 
 ---
 
+## Scraper Pipeline (Admin)
+
+Admin scraping endpoints are exposed at:
+
+- `POST /api/v1/admin/scraper/scrape/`
+- `GET /api/v1/admin/scraper/status/`
+- `GET /api/v1/admin/scraper/download/`
+- `POST /api/v1/admin/scraper/ingest/`
+
+Strategy:
+
+1. Scrapers collect raw detail-page HTML from supported portals.
+2. Claude extracts normalized scholarship fields from HTML batches.
+3. Data is validated and filtered (including expired-deadline skips).
+4. Admin reviews CSV before ingestion.
+5. Ingest writes to DB with duplicate protection (`name + provider`).
+
+Ownership split:
+
+- `admin_api`: admin dashboard, users, admin messaging, admin scholarship intake
+- `scraper`: scraping and ingest logic/endpoints
+- `core`: public scholarship APIs
+
+---
+
 ## Broadcasts
 
 Admins can send broadcasts from the admin dashboard.
