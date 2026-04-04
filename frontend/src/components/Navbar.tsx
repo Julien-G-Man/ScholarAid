@@ -54,6 +54,15 @@ export default function Navbar() {
                     {user.first_name || user.username}
                   </Link>
                 </li>
+                {(user.is_staff || user.is_superuser) && (
+                  <li className="nav-item ms-lg-2">
+                    <Link className="btn btn-sm rounded-pill px-3 fw-semibold" href="/admin"
+                      style={{ background: '#A31F34', color: '#fff' }}>
+                      <i className="bi bi-shield-lock me-1" />
+                      Admin
+                    </Link>
+                  </li>
+                )}
                 <li className="nav-item ms-lg-2">
                   <Link className="btn btn-light btn-sm rounded-pill px-3 text-primary-brand fw-semibold" href="/dashboard">
                     Dashboard

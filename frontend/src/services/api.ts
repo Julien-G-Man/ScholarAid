@@ -4,7 +4,7 @@
  */
 
 import axiosInstance from './axiosInstance';
-import type { Scholarship, PaginatedResponse } from '@/types';
+import type { Scholarship, PaginatedResponse, AdminStats, AdminUser, AdminUserDetail } from '@/types';
 
 const api = {
   // ─── Scholarships ──────────────────────────────────────────────────────────
@@ -130,6 +130,20 @@ const api = {
     }>;
   }> {
     return axiosInstance.get(`/ai-review/${sessionId}/chat/`).then((r) => r.data);
+  },
+
+  // ─── Admin ─────────────────────────────────────────────────────────────────
+
+  getAdminStats(): Promise<AdminStats> {
+    return axiosInstance.get('/admin/stats/').then((r) => r.data);
+  },
+
+  getAdminUsers(): Promise<AdminUser[]> {
+    return axiosInstance.get('/admin/users/').then((r) => r.data);
+  },
+
+  getAdminUserDetail(userId: number): Promise<AdminUserDetail> {
+    return axiosInstance.get(`/admin/users/${userId}/`).then((r) => r.data);
   },
 };
 

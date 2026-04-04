@@ -5,14 +5,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/services/api';
-import type { Scholarship } from '@/types';
+import type { AIReviewSession, Scholarship } from '@/types';
 
 export default function AIPrepHubPage() {
   const { user, initialising } = useAuth();
   const router = useRouter();
   const [scholarships, setScholarships] = useState<Scholarship[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sessions, setSessions] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<AIReviewSession[]>([]);
 
   // Redirect if not logged in
   useEffect(() => {
@@ -94,7 +94,10 @@ export default function AIPrepHubPage() {
                 </div>
               ) : (
                 <div className="alert alert-info rounded-4">
-                  No featured scholarships available. Try browsing all scholarships to get started.
+                  <p className="mb-3">No featured scholarships available. Try browsing all scholarships to get started.</p>
+                  <Link href="/scholarships" className="btn btn-sm btn-outline-primary-brand rounded-pill">
+                    Browse Scholarships
+                  </Link>
                 </div>
               )}
             </div>

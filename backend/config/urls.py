@@ -19,6 +19,7 @@ urlpatterns = [
     path('api/v1/auth/', include('users.api_urls')),
     path('api/v1/', include('core.api_urls')),
     path('api/v1/', include('ai_review.api_urls')),
+    path('api/v1/', include('admin_api.urls')),
 ]
 
 # Serve uploaded media files in development

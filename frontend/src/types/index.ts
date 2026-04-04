@@ -38,7 +38,94 @@ export interface User {
   email: string;
   first_name: string;
   last_name: string;
+  is_staff: boolean;
+  is_superuser: boolean;
   profile?: UserProfile;
+}
+
+// ─── Admin API ─────────────────────────────────────────────────────────────
+
+export interface AdminStats {
+  platform: {
+    total_users: number;
+    new_users_this_week: number;
+    total_scholarships: number;
+    newsletter_subscribers: number;
+    total_contact_messages: number;
+    unread_messages: number;
+  };
+  ai: {
+    total_sessions: number;
+    in_progress: number;
+    submitted: number;
+    reviewed: number;
+    archived: number;
+    avg_score: number;
+    total_chat_messages: number;
+    sessions_this_week: number;
+  };
+}
+
+export interface AdminUser {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  date_joined: string;
+  is_active: boolean;
+  is_staff: boolean;
+  sessions_total: number;
+  sessions_reviewed: number;
+  avg_score: number | null;
+  questions_asked: number;
+  last_active: string | null;
+}
+
+export interface AdminUserDetail {
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    date_joined: string;
+    is_active: boolean;
+    is_staff: boolean;
+    profile: {
+      institution: string;
+      field_of_study: string;
+      country: string;
+      bio: string;
+    };
+  };
+  sessions: Array<{
+    id: number;
+    scholarship_id: number;
+    scholarship_name: string;
+    status: 'in_progress' | 'submitted' | 'reviewed' | 'archived';
+    notes: string;
+    created_at: string;
+    updated_at: string;
+    feedback: {
+      overall_score: number;
+      structure_feedback: string;
+      clarity_feedback: string;
+      relevance_feedback: string;
+      persuasiveness_feedback: string;
+      grammar_feedback: string;
+      strengths: string;
+      improvements: string;
+      next_steps: string;
+      reviewed_at: string;
+    } | null;
+    chat_messages: Array<{
+      id: number;
+      role: 'user' | 'ai';
+      content: string;
+      created_at: string;
+    }>;
+  }>;
 }
 
 export interface AuthResponse extends AuthTokens {
