@@ -7,16 +7,25 @@ from .views import (
     AdminConversationView,
     AdminUnreadCountView,
     AdminDeleteMessageView,
+)
+from .scholarship_management_views import (
     ScholarshipExtractView,
     AdminScholarshipCreateView,
+    AdminScholarshipDeleteView,
+    AdminScholarshipBulkDeleteView,
 )
 
 urlpatterns = [
     path('admin/stats/', AdminStatsView.as_view(), name='api-admin-stats'),
     path('admin/users/', AdminUsersView.as_view(), name='api-admin-users'),
     path('admin/users/<int:user_id>/', AdminUserDetailView.as_view(), name='api-admin-user-detail'),
+    
+    #scholarships
     path('admin/scholarships/extract/', ScholarshipExtractView.as_view(), name='admin-scholarship-extract'),
     path('admin/scholarships/', AdminScholarshipCreateView.as_view(), name='admin-scholarship-create'),
+    path('admin/scholarships/<int:scholarship_id>/', AdminScholarshipDeleteView.as_view(), name='admin-scholarship-delete'),
+    path('admin/scholarships/bulk-delete/', AdminScholarshipBulkDeleteView.as_view(), name='admin-scholarship-bulk-delete'),
+    
     # Messaging
     path('admin/messages/', AdminInboxView.as_view(), name='api-admin-messages-inbox'),
     path('admin/messages/unread-count/', AdminUnreadCountView.as_view(), name='api-admin-messages-unread'),

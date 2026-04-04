@@ -6,7 +6,11 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useMessaging } from '@/context/MessagingContext';
 import api from '@/services/api';
-import type { AdminStats, AdminUser, AdminConversation } from '@/types';
+import type {
+  AdminStats,
+  AdminUser,
+  AdminConversation,
+} from '@/types';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
@@ -174,7 +178,7 @@ export default function AdminPage() {
           <h4 className="fw-bold text-primary-brand mb-3">Admin tools</h4>
           <div className="card border-0 rounded-4 shadow-sm p-4 mb-5">
             <div className="row g-3">
-              <div className="col-12 col-md-6">
+              <div className="col-12 col-md-4">
                 <Link
                   href="/admin/scholarships/intake"
                   className="btn btn-outline-primary-brand rounded-pill w-100 py-2"
@@ -183,13 +187,22 @@ export default function AdminPage() {
                   AI Intake (single)
                 </Link>
               </div>
-              <div className="col-12 col-md-6">
+              <div className="col-12 col-md-4">
                 <Link
                   href="/admin/scholarships/pipeline"
                   className="btn btn-outline-primary-brand rounded-pill w-100 py-2"
                 >
                   <i className="bi bi-diagram-3 me-2" />
                   Scraper Pipeline
+                </Link>
+              </div>
+              <div className="col-12 col-md-4">
+                <Link
+                  href="/admin/scholarships"
+                  className="btn btn-outline-primary-brand rounded-pill w-100 py-2"
+                >
+                  <i className="bi bi-table me-2" />
+                  Manage Scholarships
                 </Link>
               </div>
             </div>

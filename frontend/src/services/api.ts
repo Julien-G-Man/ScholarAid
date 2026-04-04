@@ -13,6 +13,9 @@ import type {
   AdminUserDetail,
   Message,
   AdminConversation,
+  AdminScholarshipBulkDeletePayload,
+  AdminScholarshipBulkDeleteResult,
+  AdminScholarshipListResponse,
 } from '@/types';
 
 const api = {
@@ -58,6 +61,34 @@ const api = {
 
   adminCreateScholarship(data: ScholarshipDraft): Promise<Scholarship> {
     return axiosInstance.post('/admin/scholarships/', data).then((r) => r.data);
+  },
+
+  getAdminScholarships(params?: {
+    search?: string;
+    provider?: string;
+    level?: string;
+    year?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<AdminScholarshipListResponse> {
+    return axiosInstance.get('/admin/scholarships/', { params }).then((r) => r.data);
+  },
+
+  adminUpdateScholarship(
+    scholarshipId: number,
+    data: Partial<ScholarshipDraft>
+  ): Promise<Scholarship> {
+    return axiosInstance.patch(`/admin/scholarships/${scholarshipId}/`, data).then((r) => r.data);
+  },
+
+  adminDeleteScholarship(scholarshipId: number): Promise<void> {
+    return axiosInstance.delete(`/admin/scholarships/${scholarshipId}/`).then(() => undefined);
+  },
+
+  adminBulkDeleteScholarships(
+    payload: AdminScholarshipBulkDeletePayload
+  ): Promise<AdminScholarshipBulkDeleteResult> {
+    return axiosInstance.post('/admin/scholarships/bulk-delete/', payload).then((r) => r.data);
   },
 
   // ─── AI Review ─────────────────────────────────────────────────────────────

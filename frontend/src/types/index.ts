@@ -205,3 +205,28 @@ export interface AIReviewSession {
   created_at: string;
   updated_at: string;
 }
+
+export interface AdminScholarshipBulkDeletePayload {
+  delete_all?: boolean;
+  years?: number[];
+  deadline_year_lte?: number;
+  provider_contains?: string;
+  name_contains?: string;
+  description_contains?: string;
+  dry_run?: boolean;
+  confirm?: boolean;
+}
+
+export interface AdminScholarshipBulkDeleteResult {
+  dry_run: boolean;
+  matches: number;
+  deleted?: number;
+  message: string;
+}
+
+export interface AdminScholarshipListResponse {
+  count: number;
+  next_offset: number | null;
+  prev_offset: number | null;
+  results: Scholarship[];
+}
