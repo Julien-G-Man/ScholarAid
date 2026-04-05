@@ -97,30 +97,34 @@ export default function AdminPage() {
       is_mine: false,
     };
 
-    setInbox((prev: AdminConversation[]): AdminConversation[] => {
-      const exists = prev.find((c) => c.user_id === fromId);
-      if (exists) {
-        const updated: AdminConversation[] = prev.map((c) =>
-          c.user_id === fromId
-            ? { ...c, unread: c.unread + 1, last_message: newLastMsg }
-            : c
-        );
-        // re-sort: most recent first
-        return [...updated].sort((a, b) =>
-          (b.last_message?.created_at ?? '').localeCompare(a.last_message?.created_at ?? '')
-        );
-      }
-      // New conversation — prepend
-      const newConversation: AdminConversation = {
-        user_id: fromId,
-        username: lastMessage.from_username ?? '',
-        first_name: lastMessage.from_name?.split(' ')[0] ?? '',
-        last_name: lastMessage.from_name?.split(' ').slice(1).join(' ') ?? '',
-        unread: 1,
-        last_message: newLastMsg,
-      };
-      return [newConversation, ...prev];
-    });
+    const timeoutId = window.setTimeout(() => {
+      setInbox((prev: AdminConversation[]): AdminConversation[] => {
+        const exists = prev.find((c) => c.user_id === fromId);
+        if (exists) {
+          const updated: AdminConversation[] = prev.map((c) =>
+            c.user_id === fromId
+              ? { ...c, unread: c.unread + 1, last_message: newLastMsg }
+              : c
+          );
+          // re-sort: most recent first
+          return [...updated].sort((a, b) =>
+            (b.last_message?.created_at ?? '').localeCompare(a.last_message?.created_at ?? '')
+          );
+        }
+        // New conversation — prepend
+        const newConversation: AdminConversation = {
+          user_id: fromId,
+          username: lastMessage.from_username ?? '',
+          first_name: lastMessage.from_name?.split(' ')[0] ?? '',
+          last_name: lastMessage.from_name?.split(' ').slice(1).join(' ') ?? '',
+          unread: 1,
+          last_message: newLastMsg,
+        };
+        return [newConversation, ...prev];
+      });
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
   }, [lastMessage]);
 
   if (initialising || !user) return null;

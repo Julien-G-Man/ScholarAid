@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -89,7 +89,7 @@ export default function AdminScholarshipsPage() {
     [search, provider, level, year]
   );
 
-  async function load(currentOffset = 0) {
+  const load = useCallback(async (currentOffset = 0) => {
     setLoading(true);
     try {
       const data = await api.getAdminScholarships({ ...query, limit, offset: currentOffset });
@@ -101,12 +101,12 @@ export default function AdminScholarshipsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [query]);
 
   useEffect(() => {
     if (!user?.is_staff && !user?.is_superuser) return;
     load(0);
-  }, [user, query]);
+  }, [user, load]);
 
   useEffect(() => {
     if (!isCreating && !editingId) return;
