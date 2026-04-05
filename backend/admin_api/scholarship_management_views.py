@@ -174,7 +174,7 @@ class AdminScholarshipCreateView(APIView):
         return Response(serializer.errors, status=400)
 
 
-class AdminScholarshipDeleteView(APIView):
+class AdminScholarshipDetailView(APIView):
     """GET/PATCH/DELETE /api/v1/admin/scholarships/{scholarship_id}/"""
     permission_classes = [IsAdminUser]
 

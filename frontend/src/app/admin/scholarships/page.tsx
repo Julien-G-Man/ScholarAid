@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -8,11 +8,31 @@ import api from '@/services/api';
 import type {
   Scholarship,
   AdminScholarshipBulkDeleteResult,
+  ScholarshipDraft,
 } from '@/types';
 
 function fmtDate(iso: string | null) {
   if (!iso) return '-';
   return new Date(iso).toLocaleDateString();
+}
+
+const EMPTY_DRAFT: ScholarshipDraft = {
+  name: '',
+  provider: '',
+  institution: '',
+  level: '',
+  description: '',
+  eligibility: '',
+  essay_prompt: '',
+  deadline: '',
+  link: '',
+  logo_url: '',
+};
+
+function emptyToNull(draft: ScholarshipDraft): ScholarshipDraft {
+  return Object.fromEntries(
+    Object.entries(draft).map(([k, v]) => [k, v === '' ? null : v])
+  ) as ScholarshipDraft;
 }
 
 export default function AdminScholarshipsPage() {
@@ -31,10 +51,12 @@ export default function AdminScholarshipsPage() {
   const [level, setLevel] = useState('');
   const [year, setYear] = useState('');
 
+  const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [draft, setDraft] = useState<Partial<Scholarship>>({});
+  const [draft, setDraft] = useState<ScholarshipDraft>(EMPTY_DRAFT);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
   const [saveErr, setSaveErr] = useState<string | null>(null);
+  const editorCardRef = useRef<HTMLDivElement | null>(null);
 
   const [singleDeleteId, setSingleDeleteId] = useState('');
   const [singleDeleteMsg, setSingleDeleteMsg] = useState<string | null>(null);
@@ -86,9 +108,51 @@ export default function AdminScholarshipsPage() {
     load(0);
   }, [user, query]);
 
+  useEffect(() => {
+    if (!isCreating && !editingId) return;
+    const card = editorCardRef.current;
+    if (!card) return;
+
+    requestAnimationFrame(() => {
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, [isCreating, editingId]);
+
+  function handleField(key: keyof ScholarshipDraft, value: string) {
+    setDraft((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function closeEditor() {
+    setIsCreating(false);
+    setEditingId(null);
+    setDraft(EMPTY_DRAFT);
+    setSaveMsg(null);
+    setSaveErr(null);
+  }
+
+  function startCreate() {
+    setIsCreating(true);
+    setEditingId(null);
+    setDraft(EMPTY_DRAFT);
+    setSaveMsg(null);
+    setSaveErr(null);
+  }
+
   function startEdit(row: Scholarship) {
+    setIsCreating(false);
     setEditingId(row.id);
-    setDraft({ ...row });
+    setDraft({
+      name: row.name ?? '',
+      provider: row.provider ?? '',
+      institution: row.institution ?? '',
+      level: row.level ?? '',
+      description: row.description ?? '',
+      eligibility: row.eligibility ?? '',
+      essay_prompt: row.essay_prompt ?? '',
+      deadline: row.deadline ?? '',
+      link: row.link ?? '',
+      logo_url: row.logo_url ?? '',
+    });
     setSaveMsg(null);
     setSaveErr(null);
   }
@@ -99,22 +163,45 @@ export default function AdminScholarshipsPage() {
     setSaveMsg(null);
     try {
       await api.adminUpdateScholarship(editingId, {
-        name: draft.name as string,
-        provider: draft.provider as string,
-        institution: (draft.institution as string | null) || null,
-        level: (draft.level as string | null) || null,
-        description: draft.description as string,
-        eligibility: (draft.eligibility as string | null) || null,
-        essay_prompt: (draft.essay_prompt as string | null) || null,
-        deadline: (draft.deadline as string | null) || null,
-        link: (draft.link as string | null) || null,
-        logo_url: (draft.logo_url as string | null) || null,
+        ...emptyToNull(draft),
       });
       setSaveMsg('Scholarship updated.');
       await load(offset);
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
       setSaveErr(msg ?? 'Update failed.');
+    }
+  }
+
+  async function saveCreate() {
+    setSaveErr(null);
+    setSaveMsg(null);
+    try {
+      const created = await api.adminCreateScholarship(emptyToNull(draft));
+      setSaveMsg(`Scholarship #${created.id} created.`);
+      setIsCreating(false);
+      setEditingId(created.id);
+      setDraft({
+        name: created.name ?? '',
+        provider: created.provider ?? '',
+        institution: created.institution ?? '',
+        level: created.level ?? '',
+        description: created.description ?? '',
+        eligibility: created.eligibility ?? '',
+        essay_prompt: created.essay_prompt ?? '',
+        deadline: created.deadline ?? '',
+        link: created.link ?? '',
+        logo_url: created.logo_url ?? '',
+      });
+      await load(0);
+    } catch (err: unknown) {
+      const data = (err as { response?: { data?: Record<string, string[] | string> } })?.response?.data;
+      const msg = data
+        ? Object.entries(data)
+            .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+            .join(' | ')
+        : 'Create failed.';
+      setSaveErr(msg);
     }
   }
 
@@ -256,6 +343,16 @@ export default function AdminScholarshipsPage() {
           </div>
 
           <div className="card border-0 rounded-4 shadow-sm p-4 mb-4">
+            <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-3">
+              <div>
+                <h5 className="fw-bold mb-1">Browse Scholarships</h5>
+                <p className="text-muted mb-0">Search existing records or open the inline card to add a new one.</p>
+              </div>
+              <button className="btn btn-primary-brand rounded-pill" onClick={startCreate}>
+                <i className="bi bi-plus-lg me-2" />
+                Add Scholarship
+              </button>
+            </div>
             <div className="row g-2 align-items-end">
               <div className="col-md-3"><label className="form-label">Search</label><input className="form-control" value={search} onChange={(e) => setSearch(e.target.value)} /></div>
               <div className="col-md-3"><label className="form-label">Provider</label><input className="form-control" value={provider} onChange={(e) => setProvider(e.target.value)} /></div>
@@ -306,24 +403,26 @@ export default function AdminScholarshipsPage() {
             </div>
           </div>
 
-          {editingId && (
-            <div className="card border-0 rounded-4 shadow-sm p-4 mt-4">
-              <h5 className="fw-bold mb-3">Edit Scholarship #{editingId}</h5>
+          {(isCreating || editingId) && (
+            <div ref={editorCardRef} className="card border-0 rounded-4 shadow-sm p-4 mt-4">
+              <h5 className="fw-bold mb-3">{isCreating ? 'Add Scholarship' : `Edit Scholarship #${editingId}`}</h5>
               <div className="row g-3">
-                <div className="col-md-6"><label className="form-label">Name</label><input className="form-control" value={draft.name ?? ''} onChange={(e) => setDraft((p) => ({ ...p, name: e.target.value }))} /></div>
-                <div className="col-md-6"><label className="form-label">Provider</label><input className="form-control" value={draft.provider ?? ''} onChange={(e) => setDraft((p) => ({ ...p, provider: e.target.value }))} /></div>
-                <div className="col-md-4"><label className="form-label">Institution</label><input className="form-control" value={draft.institution ?? ''} onChange={(e) => setDraft((p) => ({ ...p, institution: e.target.value }))} /></div>
-                <div className="col-md-4"><label className="form-label">Level</label><input className="form-control" value={draft.level ?? ''} onChange={(e) => setDraft((p) => ({ ...p, level: e.target.value }))} /></div>
-                <div className="col-md-4"><label className="form-label">Deadline (YYYY-MM-DD)</label><input className="form-control" value={draft.deadline ?? ''} onChange={(e) => setDraft((p) => ({ ...p, deadline: e.target.value }))} /></div>
-                <div className="col-12"><label className="form-label">Link</label><input className="form-control" value={draft.link ?? ''} onChange={(e) => setDraft((p) => ({ ...p, link: e.target.value }))} /></div>
-                <div className="col-12"><label className="form-label">Logo URL</label><input className="form-control" value={draft.logo_url ?? ''} onChange={(e) => setDraft((p) => ({ ...p, logo_url: e.target.value }))} /></div>
-                <div className="col-12"><label className="form-label">Description</label><textarea className="form-control" rows={4} value={draft.description ?? ''} onChange={(e) => setDraft((p) => ({ ...p, description: e.target.value }))} /></div>
-                <div className="col-12"><label className="form-label">Eligibility</label><textarea className="form-control" rows={3} value={draft.eligibility ?? ''} onChange={(e) => setDraft((p) => ({ ...p, eligibility: e.target.value }))} /></div>
-                <div className="col-12"><label className="form-label">Essay prompt</label><textarea className="form-control" rows={3} value={draft.essay_prompt ?? ''} onChange={(e) => setDraft((p) => ({ ...p, essay_prompt: e.target.value }))} /></div>
+                <div className="col-md-6"><label className="form-label">Name</label><input className="form-control" value={draft.name} onChange={(e) => handleField('name', e.target.value)} /></div>
+                <div className="col-md-6"><label className="form-label">Provider</label><input className="form-control" value={draft.provider} onChange={(e) => handleField('provider', e.target.value)} /></div>
+                <div className="col-md-4"><label className="form-label">Institution</label><input className="form-control" value={draft.institution ?? ''} onChange={(e) => handleField('institution', e.target.value)} /></div>
+                <div className="col-md-4"><label className="form-label">Level</label><input className="form-control" value={draft.level ?? ''} onChange={(e) => handleField('level', e.target.value)} /></div>
+                <div className="col-md-4"><label className="form-label">Deadline (YYYY-MM-DD)</label><input className="form-control" value={draft.deadline ?? ''} onChange={(e) => handleField('deadline', e.target.value)} /></div>
+                <div className="col-12"><label className="form-label">Link</label><input className="form-control" value={draft.link ?? ''} onChange={(e) => handleField('link', e.target.value)} /></div>
+                <div className="col-12"><label className="form-label">Logo URL</label><input className="form-control" value={draft.logo_url ?? ''} onChange={(e) => handleField('logo_url', e.target.value)} /></div>
+                <div className="col-12"><label className="form-label">Description</label><textarea className="form-control" rows={4} value={draft.description} onChange={(e) => handleField('description', e.target.value)} /></div>
+                <div className="col-12"><label className="form-label">Eligibility</label><textarea className="form-control" rows={3} value={draft.eligibility ?? ''} onChange={(e) => handleField('eligibility', e.target.value)} /></div>
+                <div className="col-12"><label className="form-label">Essay prompt</label><textarea className="form-control" rows={3} value={draft.essay_prompt ?? ''} onChange={(e) => handleField('essay_prompt', e.target.value)} /></div>
               </div>
               <div className="d-flex gap-2 mt-3">
-                <button className="btn btn-primary-brand rounded-pill px-4" onClick={saveEdit}>Save changes</button>
-                <button className="btn btn-outline-secondary rounded-pill px-4" onClick={() => setEditingId(null)}>Close</button>
+                <button className="btn btn-primary-brand rounded-pill px-4" onClick={isCreating ? saveCreate : saveEdit}>
+                  {isCreating ? 'Create scholarship' : 'Save changes'}
+                </button>
+                <button className="btn btn-outline-secondary rounded-pill px-4" onClick={closeEditor}>Close</button>
               </div>
               {saveMsg && <div className="alert alert-success mt-3 mb-0">{saveMsg}</div>}
               {saveErr && <div className="alert alert-danger mt-3 mb-0">{saveErr}</div>}

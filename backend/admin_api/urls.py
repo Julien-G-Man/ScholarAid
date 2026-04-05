@@ -11,7 +11,7 @@ from .views import (
 from .scholarship_management_views import (
     ScholarshipExtractView,
     AdminScholarshipCreateView,
-    AdminScholarshipDeleteView,
+    AdminScholarshipDetailView,
     AdminScholarshipBulkDeleteView,
 )
 
@@ -22,8 +22,8 @@ urlpatterns = [
     
     #scholarships
     path('admin/scholarships/extract/', ScholarshipExtractView.as_view(), name='admin-scholarship-extract'),
-    path('admin/scholarships/', AdminScholarshipCreateView.as_view(), name='admin-scholarship-create'),
-    path('admin/scholarships/<int:scholarship_id>/', AdminScholarshipDeleteView.as_view(), name='admin-scholarship-delete'),
+    path('admin/scholarships/', AdminScholarshipCreateView.as_view(), name='admin-scholarship-list-create'),
+    path('admin/scholarships/<int:scholarship_id>/', AdminScholarshipDetailView.as_view(), name='admin-scholarship-detail'),
     path('admin/scholarships/bulk-delete/', AdminScholarshipBulkDeleteView.as_view(), name='admin-scholarship-bulk-delete'),
     
     # Messaging
