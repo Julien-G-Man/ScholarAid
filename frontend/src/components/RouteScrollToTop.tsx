@@ -8,6 +8,15 @@ export default function RouteScrollToTop() {
 
   useEffect(() => {
     window.requestAnimationFrame(() => {
+      const hash = window.location.hash;
+      if (hash) {
+        const target = document.querySelector<HTMLElement>(hash);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }, [pathname]);

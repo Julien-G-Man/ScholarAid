@@ -17,45 +17,108 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Platform Details */}
-      <section className="py-5 home-platform-section">
+      {/* About */}
+      <section className="py-5 border-bottom home-platform-section" id="about">
         <div className="container">
-          <div className="row justify-content-center mb-5">
-            <div className="col-lg-10 text-center">
-              <p className="lead text-muted mb-0">
-                ScholarAid helps students discover trusted scholarship opportunities, understand requirements quickly,
-                and improve application quality with practical AI-assisted feedback.
+          <div className="row justify-content-center">
+            <div className="col-lg-8 text-center">
+              <h2 className="fw-bold text-primary-brand mb-4">Who We Are</h2>
+              <p className="lead text-muted">
+                ScholarAid is a scholarship platform that helps students discover curated global opportunities, stay on top
+                of application requirements, and get extra support when they need it. Browse scholarships by level and field,
+                manage your application journey, and use AI feedback as a practical layer on top of the core experience.
+                Whether you&apos;re just starting your search or getting ready to submit, ScholarAid is built to make each
+                step clearer and easier to navigate.
               </p>
             </div>
           </div>
+        </div>
+      </section>
 
-          <h3 className="fw-bold mb-4 text-primary-brand text-center">What ScholarAid Has to Offer</h3>
-          <div className="row g-4">
+      <section className="py-5 bg-light-brand">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-md-5 mb-4 mb-md-0">
+              <h2 className="fw-bold text-primary-brand mb-4">Our Mission</h2>
+              <p className="lead">
+                ScholarAid is dedicated to <strong>bridging the gap</strong> between aspiring students and global scholarship
+                opportunities. We believe that access to education is a fundamental right, and our platform is built to make
+                that journey smoother and more accessible for everyone.
+              </p>
+              <p className="text-muted">
+                We strive to empower students by providing reliable, curated, and easily accessible information on scholarships
+                tailored to various fields and academic levels. Our goal is to unlock potential and foster educational growth.
+              </p>
+            </div>
+            <div className="col-md-7">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/img/students_collaborating.jpg"
+                className="img-fluid rounded-4 shadow-lg"
+                alt="Students discussing"
+                style={{ maxHeight: '380px', objectFit: 'cover', width: '100%' }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-5">
+        <div className="container">
+          <div className="row align-items-center flex-row-reverse">
+            <div className="col-md-6 mb-4 mb-md-0">
+              <h2 className="fw-bold text-primary-brand mb-4">Our Vision</h2>
+              <p className="lead">
+                We envision a future where every student, regardless of their background or location, has the opportunity to
+                pursue higher education and achieve their full potential.
+              </p>
+              <p className="text-muted">
+                ScholarAid aims to be the leading platform for scholarship seekers in Africa and beyond, fostering a generation
+                of informed, skilled, and empowered graduates ready to make a significant impact on their communities and the world.
+              </p>
+            </div>
+            <div className="col-md-6">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/img/graduation.png"
+                className="img-fluid rounded-4 shadow-lg"
+                alt="Graduation ceremony"
+                style={{ objectFit: 'cover', width: '100%' }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-5">
+        <div className="container text-center">
+          <h2 className="fw-bold text-primary-brand mb-5">What You Get</h2>
+          <div className="row g-4 justify-content-center">
             <div className="col-md-4">
-              <div className="feature-box home-feature-card p-4 rounded-4 h-100 bg-white">
-                <span className="home-feature-icon" aria-hidden="true">
-                  <i className="bi bi-search" />
-                </span>
-                <h3 className="fw-bold text-primary-brand">Explore Scholarships</h3>
-                <p className="text-muted">Discover curated opportunities tailored to different fields and levels.</p>
+              <div className="card p-4 h-100 shadow-sm border-0 rounded-4 feature-box">
+                <div className="card-body">
+                  <i className="bi bi-globe display-4 text-primary-brand mb-3 d-block" />
+                  <h4 className="fw-bold">Global Opportunities</h4>
+                  <p className="text-muted">Access a vast database of scholarships from around the world.</p>
+                </div>
               </div>
             </div>
             <div className="col-md-4">
-              <div className="feature-box home-feature-card p-4 rounded-4 h-100 bg-white">
-                <span className="home-feature-icon" aria-hidden="true">
-                  <i className="bi bi-stars" />
-                </span>
-                <h3 className="fw-bold text-primary-brand">AI Review</h3>
-                <p className="text-muted">Use AI guidance to refine essays and approach each application with more confidence.</p>
+              <div className="card p-4 h-100 shadow-sm border-0 rounded-4 feature-box">
+                <div className="card-body">
+                  <i className="bi bi-robot display-4 text-primary-brand mb-3 d-block" />
+                  <h4 className="fw-bold">Application Support</h4>
+                  <p className="text-muted">Use AI guidance and review tools to strengthen essays and prepare with more confidence.</p>
+                </div>
               </div>
             </div>
             <div className="col-md-4">
-              <div className="feature-box home-feature-card p-4 rounded-4 h-100 bg-white">
-                <span className="home-feature-icon" aria-hidden="true">
-                  <i className="bi bi-person-check" />
-                </span>
-                <h3 className="fw-bold text-primary-brand">Free</h3>
-                <p className="text-muted">Create an account to save opportunities, track progress, and unlock personalized guidance.</p>
+              <div className="card p-4 h-100 shadow-sm border-0 rounded-4 feature-box">
+                <div className="card-body">
+                  <i className="bi bi-people display-4 text-primary-brand mb-3 d-block" />
+                  <h4 className="fw-bold">Community Focus</h4>
+                  <p className="text-muted">We prioritize support for students from diverse backgrounds.</p>
+                </div>
               </div>
             </div>
           </div>

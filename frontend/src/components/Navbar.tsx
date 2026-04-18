@@ -170,7 +170,6 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav" ref={navbarCollapseRef}>
           <ul className="navbar-nav ms-auto align-items-lg-center">
             <li className="nav-item"><Link className="nav-link" href="/" scroll={false} onClick={closeNavbar}>Home</Link></li>
-            <li className="nav-item"><Link className="nav-link" href="/about" scroll={false} onClick={closeNavbar}>About</Link></li>
             <li className="nav-item"><Link className="nav-link" href="/scholarships" scroll={false} onClick={closeNavbar}>Scholarships</Link></li>
             <li className="nav-item"><Link className="nav-link" href="/contact" scroll={false} onClick={closeNavbar}>Contact</Link></li>
 

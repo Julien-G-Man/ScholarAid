@@ -46,7 +46,7 @@ export default function Footer() {
             <ul className="list-unstyled mb-0" style={{ fontSize: '0.9rem' }}>
               <li className="mb-2"><Link href="/" className="footer-link">Home</Link></li>
               <li className="mb-2"><Link href="/scholarships" className="footer-link">Scholarships</Link></li>
-              <li className="mb-2"><Link href="/about" className="footer-link">About</Link></li>
+              <li className="mb-2"><Link href="/#about" className="footer-link">About</Link></li>
               <li className="mb-2"><Link href="/contact" className="footer-link">Contact</Link></li>
             </ul>
           </div>
