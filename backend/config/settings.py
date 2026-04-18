@@ -224,3 +224,30 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
 
 X_FRAME_OPTIONS = 'DENY'
+
+
+# ─── Logging (Auth Only) ─────────────────────────────────────────────────────
+AUTH_LOG_LEVEL = os.getenv('AUTH_LOG_LEVEL', 'INFO').upper()
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'auth': {
+            'format': '%(asctime)s %(levelname)s %(name)s %(message)s',
+        },
+    },
+    'handlers': {
+        'console_auth': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'auth',
+        },
+    },
+    'loggers': {
+        'users.auth': {
+            'handlers': ['console_auth'],
+            'level': AUTH_LOG_LEVEL,
+            'propagate': False,
+        },
+    },
+}
