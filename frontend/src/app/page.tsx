@@ -7,8 +7,8 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="hero d-flex flex-column justify-content-center align-items-center">
-        <div className="container text-center">
+        <section className="hero home-hero d-flex flex-column justify-content-end align-items-center">
+          <div className="container text-center home-hero-content">
           <h1 className="display-2 fw-bold">ScholarAid</h1>
           <p className="lead mb-4">Find scholarships, stay prepared, and build stronger applications.</p>
           <Link href="/scholarships" className="btn btn-lg btn-light px-5 py-3 rounded-pill shadow-lg">
@@ -18,7 +18,7 @@ export default function HomePage() {
       </section>
 
       {/* Platform Details */}
-      <section className="py-5">
+      <section className="py-5 home-platform-section">
         <div className="container">
           <div className="row justify-content-center mb-5">
             <div className="col-lg-10 text-center">
@@ -32,21 +32,30 @@ export default function HomePage() {
           <h3 className="fw-bold mb-4 text-primary-brand text-center">What ScholarAid Has to Offer</h3>
           <div className="row g-4">
             <div className="col-md-4">
-              <div className="feature-box p-4 shadow-sm rounded-4 h-100 bg-white">
-                <h3 className="fw-bold text-primary-brand">🎓 Explore Scholarships</h3>
+              <div className="feature-box home-feature-card p-4 rounded-4 h-100 bg-white">
+                <span className="home-feature-icon" aria-hidden="true">
+                  <i className="bi bi-search" />
+                </span>
+                <h3 className="fw-bold text-primary-brand">Explore Scholarships</h3>
                 <p className="text-muted">Discover curated opportunities tailored to different fields and levels.</p>
               </div>
             </div>
             <div className="col-md-4">
-              <div className="feature-box p-4 shadow-sm rounded-4 h-100 bg-white">
-                <h3 className="fw-bold text-primary-brand">🤖 AI Review</h3>
+              <div className="feature-box home-feature-card p-4 rounded-4 h-100 bg-white">
+                <span className="home-feature-icon" aria-hidden="true">
+                  <i className="bi bi-stars" />
+                </span>
+                <h3 className="fw-bold text-primary-brand">AI Review</h3>
                 <p className="text-muted">Use AI guidance to refine essays and approach each application with more confidence.</p>
               </div>
             </div>
             <div className="col-md-4">
-              <div className="feature-box p-4 shadow-sm rounded-4 h-100 bg-white">
-                <h3 className="fw-bold text-primary-brand">⚡ Simple &amp; Fast</h3>
-                <p className="text-muted">No signup required — just start browsing and improving right away.</p>
+              <div className="feature-box home-feature-card p-4 rounded-4 h-100 bg-white">
+                <span className="home-feature-icon" aria-hidden="true">
+                  <i className="bi bi-person-check" />
+                </span>
+                <h3 className="fw-bold text-primary-brand">Free</h3>
+                <p className="text-muted">Create an account to save opportunities, track progress, and unlock personalized guidance.</p>
               </div>
             </div>
           </div>
@@ -72,7 +81,7 @@ export default function HomePage() {
           <h2 className="fw-bold mb-3 text-white">Not sure if you&apos;re ready?</h2>
           <p className="lead mb-4 text-white">Get quick guidance before you move on to the bigger application steps.</p>
           <Link href="/ai-prep" className="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-lg">
-            💡 Try AI Review
+            Get Started Now
           </Link>
         </div>
       </section>

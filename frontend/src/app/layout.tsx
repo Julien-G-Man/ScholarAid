@@ -7,6 +7,7 @@ import BootstrapClient from '@/components/BootstrapClient';
 import HealthPing from '@/components/HealthPing';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import RouteScrollToTop from '@/components/RouteScrollToTop';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://scholar-aid.netlify.app';
 
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <BootstrapClient />
           <HealthPing />
           <Navbar />
+          <RouteScrollToTop />
           <main>{children}</main>
           <Footer />
         </Providers>

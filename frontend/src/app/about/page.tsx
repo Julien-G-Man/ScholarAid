@@ -1,8 +1,8 @@
 export default function AboutPage() {
   return (
     <>
-      <section className="page-hero d-flex flex-column justify-content-center align-items-center">
-        <div className="container text-center">
+      <section className="page-hero page-hero--top-visible d-flex flex-column justify-content-end align-items-start">
+        <div className="container text-start page-hero-content">
           <h1 className="display-3 fw-bold">About ScholarAid</h1>
           <p className="lead">Empowering the next generation of African leaders.</p>
         </div>

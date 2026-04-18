@@ -32,8 +32,8 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="contact-hero d-flex flex-column justify-content-center align-items-center">
-        <div className="container text-center">
+      <section className="contact-hero contact-hero--top-visible d-flex flex-column justify-content-end align-items-start">
+        <div className="container text-start page-hero-content">
           <h1 className="display-3 fw-bold">Get In Touch!</h1>
           <p className="lead">
             We&apos;re here to answer all your questions about scholarships, AI reviews, and more.

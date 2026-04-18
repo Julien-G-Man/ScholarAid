@@ -11,6 +11,10 @@ body {
   color: #333;
 }
 
+main {
+  padding-top: 5.5rem;
+}
+
 a {
   transition: color 0.2s ease;
   text-decoration: none;
@@ -23,6 +27,19 @@ a:hover { color: #8E1B2C; }
   background-color: var(--primary-brand-red);
   box-shadow: 0 2px 15px rgba(0,0,0,0.2);
   padding: 1rem 0;
+}
+.site-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  width: 100%;
+  transform: translateY(0);
+  transition: transform 0.28s ease;
+}
+.site-navbar--hidden {
+  transform: translateY(-110%);
 }
 .navbar-brand {
   font-weight: 700;
@@ -85,12 +102,26 @@ a:hover { color: #8E1B2C; }
 /* ── Hero ── */
 .hero {
   background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-              url('/img/graduation.png') center/cover no-repeat;
+              url('/img/graduation.png') center calc(50% - 2.75rem) / cover no-repeat;
   min-height: 80vh;
   display: flex;
   align-items: center;
   text-align: center;
   color: white;
+}
+
+.home-hero {
+  margin-top: -5.5rem;
+  min-height: calc(100svh + 5.5rem);
+  padding-top: 5.5rem;
+}
+
+.home-hero-content {
+  padding-bottom: clamp(2.75rem, 10vh, 7rem);
+}
+
+.home-platform-section {
+  background-color: #fff;
 }
 .page-hero {
   background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
@@ -102,6 +133,9 @@ a:hover { color: #8E1B2C; }
   color: white;
   margin-bottom: 3rem;
 }
+.page-hero--top-visible {
+  background-position: center top;
+}
 .contact-hero {
   background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
               url('/img/students_collaborating.jpg') center/cover no-repeat;
@@ -112,6 +146,15 @@ a:hover { color: #8E1B2C; }
   color: white;
   margin-bottom: 4rem;
 }
+.page-hero-content {
+  width: min(100%, 760px);
+  padding-bottom: clamp(1.75rem, 7vh, 4rem);
+}
+
+.page-hero-content .lead {
+  margin-bottom: 0;
+}
+
 .cta-section {
   background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
               url('/img/fulbright_students.jpg') center/cover no-repeat;
@@ -124,7 +167,64 @@ a:hover { color: #8E1B2C; }
   background-position: center center;
 }
 
+@media (min-width: 992px) {
+  .page-hero,
+  .contact-hero {
+    min-height: 72vh;
+  }
+
+  .page-hero--top-visible {
+    background-position: center top;
+  }
+
+  .contact-hero--top-visible {
+    background-position: center 65%;
+  }
+
+  .page-hero--top-visible .page-hero-content,
+  .contact-hero--top-visible .page-hero-content {
+    width: min(100%, 1040px);
+    max-width: none;
+    padding-left: 0;
+    padding-bottom: clamp(2rem, 5vh, 4rem);
+  }
+
+  .contact-hero--top-visible .page-hero-content {
+    padding-bottom: clamp(3rem, 8vh, 6rem);
+  }
+}
+
 @media (max-width: 991.98px) {
+  main {
+    padding-top: 5rem;
+  }
+
+  .home-hero {
+    margin-top: -5rem;
+    min-height: calc(100svh + 5rem);
+    padding-top: 5rem;
+  }
+
+  .home-hero-content {
+    padding-bottom: clamp(2rem, 7vh, 3.5rem);
+  }
+
+  .hero,
+  .home-hero {
+    min-height: 68vh;
+    background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+                url('/img/graduation.png') center 32% / cover no-repeat;
+  }
+
+  .page-hero-content {
+    width: 100%;
+    padding-bottom: clamp(1.25rem, 5vh, 2.25rem);
+  }
+
+  .home-platform-section {
+    padding-top: 2rem !important;
+  }
+
   .cta-section {
     min-height: 55vh;
     background-attachment: scroll;
@@ -148,6 +248,118 @@ a:hover { color: #8E1B2C; }
 .feature-box:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(163,31,52,0.15);
+}
+
+.home-feature-card {
+  border: 1px solid rgba(163, 31, 52, 0.12);
+  box-shadow: 0 12px 28px rgba(38, 26, 31, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.home-feature-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(163, 31, 52, 0.32);
+  box-shadow: 0 22px 34px rgba(77, 20, 33, 0.14);
+}
+
+.home-feature-icon {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  background: linear-gradient(145deg, rgba(163,31,52,0.14), rgba(163,31,52,0.04));
+  color: var(--primary-brand-red);
+  box-shadow: inset 0 0 0 1px rgba(163,31,52,0.1);
+}
+
+.home-feature-icon i {
+  font-size: 1.25rem;
+}
+
+.featured-slider-shell {
+  position: relative;
+  --featured-card-width: min(420px, 85vw);
+}
+
+.featured-slider-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.featured-nav-btn {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(163, 31, 52, 0.26);
+  background: white;
+  color: var(--primary-brand-red);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.featured-nav-btn:hover:not(:disabled) {
+  background: var(--primary-brand-red);
+  color: white;
+  border-color: var(--primary-brand-red);
+  transform: translateY(-2px);
+}
+
+.featured-nav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.featured-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scroll-padding-inline: 50%;
+  padding-inline: calc((100% - var(--featured-card-width)) / 2);
+  padding-bottom: 0.65rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.featured-track::-webkit-scrollbar {
+  display: none;
+}
+
+.featured-track-item {
+  flex: 0 0 var(--featured-card-width);
+  scroll-snap-align: center;
+}
+
+.featured-scroll-hint {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: rgba(77, 20, 33, 0.72);
+}
+
+@media (max-width: 991.98px) {
+  .featured-slider-shell {
+    --featured-card-width: min(340px, 88vw);
+  }
+
+  .featured-slider-controls {
+    justify-content: center;
+  }
+
+  .featured-track-item {
+    flex-basis: var(--featured-card-width);
+  }
+
+  .featured-scroll-hint {
+    text-align: center;
+  }
 }
 
 /* ── Contact ── */

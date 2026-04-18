@@ -2,8 +2,8 @@ export default function Loading() {
   return (
     <>
       {/* Hero skeleton */}
-      <div className="page-hero d-flex flex-column justify-content-center align-items-center">
-        <div className="container text-center">
+      <div className="page-hero page-hero--top-visible d-flex flex-column justify-content-end align-items-start">
+        <div className="container text-start page-hero-content">
           <h1 className="display-3 fw-bold">Available Scholarships</h1>
           <p className="lead">Explore a comprehensive list of scholarships available to you.</p>
         </div>
